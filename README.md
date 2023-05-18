@@ -24,7 +24,7 @@
 - 📄 Docs : 문서 작성 및 수정 (README 포함)
 - 🔭 Refactor : 코드 개선, 기능 변화가 없는 코드 변경
 - 🌏 Deploy : 배포 관련 전부
-- 📣 PRMerge : Pull Request 시 사용
+- 📣 PRMerge : develop -> main 으로 가는 Pull Request 시 사용
 
 <br><br><br><br>
 
@@ -36,7 +36,7 @@
 
 - reviewer 설정 할 것.
 - assigneess 설정 할 것.
-- main 브랜치로의 PR 은 별도의 issue 를 생성할 것.
+- 이슈 종류 중 PRMerge 는 develop -> main 으로 가는 PR 에만 사용
 
 <br><br>
 
