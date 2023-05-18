@@ -108,4 +108,25 @@
 - Chore : 사소한 일 (위의 모든 것이 아니거나, 빈 파일을 추가하거나 삭제만 하는 경우)
 - Deploy : 배포 (배포 관련한 모든 커밋에 대해)
 
-<br><br><br>
+<br>
+
+
+## PRMerge 커밋 시
+
+<br>
+
+### 이슈 브랜치에서 develop 으로 이동 시
+- 제목은 PRMerge/#PR번호: <#이슈번호 -> develop> 와 같이 적고, 내용은 github에서 제공해주는 대로 그대로 작성한다.
+- ex) 
+- 제목 : PRMerge/#3: <#1 -> develop>
+- 내용 : [Setting/#1] 이슈 템플릿, 풀 리퀘스트 템플릿 추가
+
+<br>
+
+### develop 브랜치에서 main 으로 이동 시
+- 제목은 PRMerge/#PR번호: <develop -> main> 와 같이 적고, 내용은 github에서 제공해주는 대로 그대로 작성한다.
+- ex) 
+- 제목 : PRMerge/#6: <develop -> main>
+- 내용 : [PRMerge/#1, #2] 이슈 & 풀 리퀘스트 템플릿 적용 및 이슈 종류 이모지 변경 적용
+ 
+<br><br><br><br>
