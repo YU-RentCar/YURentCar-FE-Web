@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../assets/Logo.png";
 
 function Nav(props) {
   return (
@@ -6,7 +7,7 @@ function Nav(props) {
       <div className="fixed top-0 left-0 right-0 flex justify-between w-screen border-b-[1px] h-20 bg-sky-100 border-slate-600">
         <div className="flex items-center justify-between w-1/4 h-full ml-3">
           <img
-            src=""
+            src={logo}
             alt="Logo"
             className="object-contain h-full px-2 py-3"
           ></img>
