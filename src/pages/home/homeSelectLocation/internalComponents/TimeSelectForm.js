@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import listShowIcon from "../../../../assets/listShowIcon.png";
 
 /**
+ * 날짜와 시간을 정하는 기능을 가진 컴포넌트
  * @param {string} props.width 부모에게서 받아온 width (tailwind 속성)
  * @param {string} props.legend 부모에게서 받아온 범례
  */
