@@ -6,6 +6,8 @@
 <style type="text/css">
 	.st0{fill:#DCE4FF;}
 	.st0:hover{fill:#789BFF}
+
+	.selected{fill:#789BFF}
 </style>
 <script type="text/javascript">
 
