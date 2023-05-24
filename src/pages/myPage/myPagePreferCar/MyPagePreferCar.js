@@ -1,6 +1,11 @@
 import React from "react";
 import PreferOptions from "./internalComponents/PreferOptions";
 
+/**
+ *
+ * @param {object} props.preferInfo 부모에게서 받아와 자식에게 전해줄 선호 차량 옵션 정보 객체
+ * @returns
+ */
 function MyPagePreferCar(props) {
   return (
     <>
