@@ -24,7 +24,7 @@ function MyPageUserInfo(props) {
           기본 정보
         </div>
         {/* 기본 정보들 */}
-        <div className="flex flex-col justify-around items-center w-full h-[60vh] bg-white border-4 rounded-md border-slate-400 px-28 py-5">
+        <div className="flex flex-col justify-around items-center w-full h-[60vh] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
           {titles.map((title) => {
             return title !== "닉네임" ? (
               // 닉네임이 아닌 경우는 기본 틀 (변경 버튼이 없음)

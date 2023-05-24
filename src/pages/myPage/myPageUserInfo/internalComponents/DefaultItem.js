@@ -8,7 +8,7 @@ import React from "react";
  * @param {string} props.setType 부모에게 받아온 현재 상황에 따른 type useState setter
  * @returns
  */
-function MyPageDefaultItem(props) {
+function DefaultItem(props) {
   return (
     <>
       <div className="flex flex-col justify-between w-full h-1/6">
@@ -33,4 +33,4 @@ function MyPageDefaultItem(props) {
   );
 }
 
-export default MyPageDefaultItem;
+export default DefaultItem;

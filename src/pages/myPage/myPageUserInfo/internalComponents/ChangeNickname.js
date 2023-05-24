@@ -8,7 +8,7 @@ import React from "react";
  * @param {string} props.setType 부모에게 받아온 현재 상황에 따른 type useState setter
  * @returns
  */
-function MyPageChangeNickname(props) {
+function ChangeNickname(props) {
   return (
     <>
       {/* 닉네임을 변경하는 과정 */}
@@ -55,4 +55,4 @@ function MyPageChangeNickname(props) {
   );
 }
 
-export default MyPageChangeNickname;
+export default ChangeNickname;
