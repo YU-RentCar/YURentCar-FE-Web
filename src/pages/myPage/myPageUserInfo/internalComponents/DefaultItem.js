@@ -5,7 +5,7 @@ import React from "react";
  * @param {string} props.title 부모의 부모부터 받아온 어떤 정보인지 title
  * @param {string} props.content 부모의 부모부터 받아온 title 에 맞는 내용
  * @param {string} props.infoType 부모의 부모에게 받아온 title 에 따른 css
- * @param {string} props.setType 부모에게 받아온 현재 상황에 따른 type useState setter
+ * @param {setter} props.setType 부모에게 받아온 현재 상황에 따른 type useState setter
  * @returns
  */
 function DefaultItem(props) {
