@@ -38,7 +38,7 @@ function TimeSelectForm(props) {
                 </div>
               </div>
 
-              <button className="flex w-[40%] justify-center items-center bg-sky-50 border-blue-500 border-[2px] rounded-full h-[60px]">
+              <div className="flex w-[40%] justify-center items-center bg-sky-50 border-blue-500 border-[2px] rounded-full h-[60px]">
                 <div className="flex justify-around w-4/5 ">
                   <div className="flex items-center justify-center w-2/3 text-xl font-extrabold">
                     {/* 날짜가 보이는 부분 */}
@@ -54,7 +54,7 @@ function TimeSelectForm(props) {
                     ></img>
                   </button>
                 </div>
-              </button>
+              </div>
             </div>
           </fieldset>
         </form>
