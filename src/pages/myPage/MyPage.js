@@ -3,6 +3,9 @@ import { useState } from "react";
 import MyPageResvCardView from "./myPageResvCardView/MyPageResvCardView";
 import MyPageUserInfo from "./myPageUserInfo/MyPageUserInfo";
 import MyPagePreferCar from "./myPagePreferCar/MyPagePreferCar";
+import MyPageRecord from "./myPageRecord/MyPageRecord";
+import MyPageLicense from "./myPageLicense/MyPageLicense";
+import MyPageAccount from "./myPageAccount/myPageAccount";
 
 function MyPage() {
   // 사용자의 예약 정보 객체
@@ -28,6 +31,23 @@ function MyPage() {
     구동기: ["자동", "수동"],
     최소인원: ["5인승", "7인승", "11인승"],
   });
+  // 사용자 내역 정보
+  let [recordInfo, setRecordInfo] = useState({
+    point: 1000,
+    recent: [
+      ["차1", "11일 1111", "11111", "11111"],
+      ["차2", "22이 2222", "22222", "22222"],
+      ["차3", "33삼 3333", "33333", "33333"],
+      ["차5", "55오 5555", "55555", "55555"],
+    ],
+  });
+  // 사용자 면허 정보
+  let [licenseInfo, setLicenseInfo] = useState({
+    종류: "1종 보통",
+    번호: "00-00-000000-00",
+    발급일자: "2023-01-01",
+    만료일자: "2023-12-31",
+  });
   return (
     <>
       <div className="w-[1200px] h-fit mx-auto pt-36">
@@ -37,6 +57,12 @@ function MyPage() {
         <MyPageUserInfo userInfo={userInfo} />
         {/* 사용자 선호 차량 조건 */}
         <MyPagePreferCar preferInfo={preferInfo} />
+        {/* 사용자 이용 내역 */}
+        <MyPageRecord recordInfo={recordInfo} />
+        {/* 사용자 면허 정보 */}
+        <MyPageLicense licenseInfo={licenseInfo} />
+        {/* 사용자 계정 관리 */}
+        <MyPageAccount />
       </div>
     </>
   );
