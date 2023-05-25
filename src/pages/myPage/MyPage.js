@@ -5,6 +5,7 @@ import MyPageUserInfo from "./myPageUserInfo/MyPageUserInfo";
 import MyPagePreferCar from "./myPagePreferCar/MyPagePreferCar";
 import MyPageRecord from "./myPageRecord/MyPageRecord";
 import MyPageLicense from "./myPageLicense/MyPageLicense";
+import MyPageAccount from "./myPageAccount/myPageAccount";
 
 function MyPage() {
   // 사용자의 예약 정보 객체
@@ -60,6 +61,8 @@ function MyPage() {
         <MyPageRecord recordInfo={recordInfo} />
         {/* 사용자 면허 정보 */}
         <MyPageLicense licenseInfo={licenseInfo} />
+        {/* 사용자 계정 관리 */}
+        <MyPageAccount />
       </div>
     </>
   );
