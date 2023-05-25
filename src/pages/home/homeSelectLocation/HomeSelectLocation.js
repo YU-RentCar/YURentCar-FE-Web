@@ -10,7 +10,7 @@ import { TimeSelectForm } from "./internalComponents/TimeSelectForm";
  */
 function HomeSelectLocation(props) {
   /* 컴포넌트의 초기 설정 */
-  const initSetting = props.width + " " + props.height;
+  const initSetting = props.width + " " + props.height + " min-h-[800px]";
 
   /* 현재 컴포넌트들에서 사용할 state */
   let [storeLocList, setStoreLocList] = useState([
