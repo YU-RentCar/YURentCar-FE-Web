@@ -3,7 +3,7 @@ import React from "react";
 function Reservation() {
   return (
     <>
-      <div className="flex flex-col justify-around items-center w-full h-[10vh]">
+      <div className="flex flex-col justify-around items-center w-full h-[10%]">
         <div className="flex items-center justify-between w-full h-1/2">
           {/* 내역 타이틀 */}
           <div className="flex items-center text-2xl font-bold text-slate-400">

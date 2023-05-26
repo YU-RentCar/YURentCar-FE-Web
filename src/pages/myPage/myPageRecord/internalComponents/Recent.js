@@ -9,7 +9,7 @@ import CarCard from "./CarCard";
 function Recent(props) {
   return (
     <>
-      <div className="w-full h-[55vh] mt-3">
+      <div className="w-full h-[70%] mt-3">
         <div className="flex flex-col justify-around w-full h-full">
           {/* 내역 타이틀 */}
           <div className="flex items-center text-2xl font-bold text-slate-400">

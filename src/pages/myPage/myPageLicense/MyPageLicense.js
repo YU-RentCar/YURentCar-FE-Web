@@ -11,7 +11,7 @@ function MyPageUserInfo(props) {
 
   return (
     <>
-      <div className="w-full mt-20 h-fit">
+      <div className="w-full mt-20 h-[70vh] min-h-[720px]">
         {/* 면허 정보 타이틀 */}
         <div className="flex items-center justify-between w-full h-12">
           <div className="flex items-center justify-center w-[15%] h-full text-xl font-bold border-2 border-dashed rounded-md border-slate-400">
@@ -23,7 +23,7 @@ function MyPageUserInfo(props) {
           </div>
         </div>
         {/* 기본 정보들 */}
-        <div className="flex flex-col justify-around items-center w-full h-[60vh] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
+        <div className="flex flex-col justify-around items-center w-full h-[90%] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
           {titles.map((title) => {
             return <Item title={title} content={props.licenseInfo[title]} />;
           })}
