@@ -11,13 +11,13 @@ import Recent from "./internalComponents/Recent";
 function MyPageRecord(props) {
   return (
     <>
-      <div className="w-full mt-20 h-fit">
+      <div className="w-full mt-20 h-[980px]">
         {/* 내역 조회 타이틀 */}
         <div className="flex items-center justify-center w-[15%] h-12 text-xl font-bold border-2 border-dashed rounded-md border-slate-400">
           내역 조회
         </div>
         {/* 각종 내역들 */}
-        <div className="flex flex-col items-center justify-between w-full pt-5 mt-5 bg-white border-4 rounded-md px-28 h-fit border-slate-400">
+        <div className="flex flex-col items-center justify-between w-full pt-5 mt-5 bg-white border-4 rounded-md px-28 h-[920px] border-slate-400">
           <Reservation />
           <Point point={props.recordInfo["point"]} />
           <Recent recent={props.recordInfo["recent"]} />

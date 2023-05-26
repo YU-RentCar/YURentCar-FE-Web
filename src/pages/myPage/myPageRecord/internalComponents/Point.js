@@ -8,7 +8,7 @@ import React from "react";
 function Point(props) {
   return (
     <>
-      <div className="flex flex-col justify-around items-center w-full h-[15vh] mt-3">
+      <div className="flex flex-col justify-around items-center w-full h-[15%] mt-3">
         <div className="flex items-center justify-between w-full h-[60%]">
           <div className="flex flex-col justify-around h-full text-2xl font-bold">
             {/* 내역 타이틀 */}
