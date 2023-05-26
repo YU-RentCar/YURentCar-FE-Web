@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 
 /**
  *
@@ -33,4 +33,4 @@ function DefaultItem(props) {
   );
 }
 
-export default DefaultItem;
+export { DefaultItem };

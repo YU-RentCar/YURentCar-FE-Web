@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import ExCar from "../../../../assets/ExCar.png";
 
 /**
@@ -37,4 +37,4 @@ function CarCard(props) {
   );
 }
 
-export default CarCard;
+export { CarCard };

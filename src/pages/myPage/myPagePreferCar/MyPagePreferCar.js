@@ -1,5 +1,5 @@
-import React from "react";
-import PreferOptions from "./internalComponents/PreferOptions";
+import { React } from "react";
+import { PreferOptions } from "./internalComponents/PreferOptions";
 
 /**
  *
@@ -28,4 +28,4 @@ function MyPagePreferCar(props) {
   );
 }
 
-export default MyPagePreferCar;
+export { MyPagePreferCar };

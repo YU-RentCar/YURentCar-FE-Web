@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 import ExCar from "../../../assets/ExCar.png";
 
 /**
@@ -51,4 +51,4 @@ function MyPageResvCardView(props) {
   );
 }
 
-export default MyPageResvCardView;
+export { MyPageResvCardView };

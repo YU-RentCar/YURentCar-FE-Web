@@ -1,5 +1,5 @@
-import React from "react";
-import CarCard from "./CarCard";
+import { React } from "react";
+import { CarCard } from "./CarCard";
 
 /**
  *
@@ -27,4 +27,4 @@ function Recent(props) {
   );
 }
 
-export default Recent;
+export { Recent };

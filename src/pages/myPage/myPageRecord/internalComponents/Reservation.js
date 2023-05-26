@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 
 function Reservation() {
   return (
@@ -20,4 +20,4 @@ function Reservation() {
   );
 }
 
-export default Reservation;
+export { Reservation };

@@ -1,12 +1,12 @@
-import React from "react";
-import Item from "./internalComponents/Item";
+import { React } from "react";
+import { Item } from "./internalComponents/Item";
 
 /**
  *
  * @param {Object} licenseInfo 최상위 컴포넌트에서 받아온 사용자의 면허 정보 객체
  * @returns
  */
-function MyPageUserInfo(props) {
+function MyPageLicense(props) {
   let titles = Object.keys(props.licenseInfo);
 
   return (
@@ -33,4 +33,4 @@ function MyPageUserInfo(props) {
   );
 }
 
-export default MyPageUserInfo;
+export { MyPageLicense };

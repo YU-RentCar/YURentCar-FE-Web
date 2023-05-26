@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 
 /**
  *
@@ -20,4 +20,4 @@ function Item(props) {
   );
 }
 
-export default Item;
+export { Item };

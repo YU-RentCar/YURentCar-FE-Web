@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 
 function MyPageAccount() {
   return (
@@ -44,4 +44,4 @@ function MyPageAccount() {
   );
 }
 
-export default MyPageAccount;
+export { MyPageAccount };

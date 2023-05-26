@@ -1,7 +1,7 @@
-import React from "react";
-import Point from "./internalComponents/Point";
-import Reservation from "./internalComponents/Reservation";
-import Recent from "./internalComponents/Recent";
+import { React } from "react";
+import { Point } from "./internalComponents/Point";
+import { Reservation } from "./internalComponents/Reservation";
+import { Recent } from "./internalComponents/Recent";
 
 /**
  *
@@ -27,4 +27,4 @@ function MyPageRecord(props) {
   );
 }
 
-export default MyPageRecord;
+export { MyPageRecord };

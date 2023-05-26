@@ -1,4 +1,4 @@
-import React from "react";
+import { React } from "react";
 
 /**
  *
@@ -76,4 +76,4 @@ function PreferOptions(props) {
   );
 }
 
-export default PreferOptions;
+export { PreferOptions };

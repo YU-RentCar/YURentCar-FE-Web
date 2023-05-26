@@ -1,11 +1,10 @@
-import React from "react";
-import { useState } from "react";
-import MyPageResvCardView from "./myPageResvCardView/MyPageResvCardView";
-import MyPageUserInfo from "./myPageUserInfo/MyPageUserInfo";
-import MyPagePreferCar from "./myPagePreferCar/MyPagePreferCar";
-import MyPageRecord from "./myPageRecord/MyPageRecord";
-import MyPageLicense from "./myPageLicense/MyPageLicense";
-import MyPageAccount from "./myPageAccount/myPageAccount";
+import { React, useState } from "react";
+import { MyPageResvCardView } from "./myPageResvCardView/MyPageResvCardView";
+import { MyPageUserInfo } from "./myPageUserInfo/MyPageUserInfo";
+import { MyPagePreferCar } from "./myPagePreferCar/MyPagePreferCar";
+import { MyPageRecord } from "./myPageRecord/MyPageRecord";
+import { MyPageLicense } from "./myPageLicense/MyPageLicense";
+import { MyPageAccount } from "./myPageAccount/myPageAccount";
 
 function MyPage() {
   // 사용자의 예약 정보 객체
@@ -68,4 +67,4 @@ function MyPage() {
   );
 }
 
-export default MyPage;
+export { MyPage };
