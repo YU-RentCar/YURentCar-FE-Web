@@ -1,7 +1,7 @@
-import React from "react";
-import { useState } from "react";
-import DefaultItem from "./internalComponents/DefaultItem";
-import ChangeNickname from "./internalComponents/ChangeNickname";
+import { React, useState } from "react";
+import { DefaultItem } from "./internalComponents/DefaultItem";
+import { ChangeNickname } from "./internalComponents/ChangeNickname";
+import { Alert } from "../popUp/Alert";
 
 /**
  *
@@ -15,6 +15,15 @@ function MyPageUserInfo(props) {
   let ContentComponent = type === "default" ? DefaultItem : ChangeNickname;
 
   let titles = Object.keys(props.userInfo);
+
+  // Alert 를 보여줄지 숨길지를 결정하는 배열
+  // 해당 컨텐츠가 필요한 Alert 의 개수 =>
+  let [alertStyle, setAlertStyle] = useState("hidden");
+  let [alertMsg, setAlertMsg] = useState("");
+  let changeState = (msg, style) => {
+    setAlertMsg(msg);
+    setAlertStyle(style);
+  };
 
   return (
     <>
@@ -41,13 +50,15 @@ function MyPageUserInfo(props) {
                 content={props.userInfo[title]}
                 infoType={"text-xl font-bold underline text-slate-400"}
                 setType={setType}
+                changeState={changeState}
               />
             );
           })}
         </div>
       </div>
+      <Alert msg={alertMsg} style={alertStyle} />
     </>
   );
 }
 
-export default MyPageUserInfo;
+export { MyPageUserInfo };
