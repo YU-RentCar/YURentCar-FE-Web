@@ -1,5 +1,6 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { PreferOptions } from "./internalComponents/PreferOptions";
+import { Alert } from "../popUp/Alert";
 
 /**
  *
@@ -7,6 +8,12 @@ import { PreferOptions } from "./internalComponents/PreferOptions";
  * @returns
  */
 function MyPagePreferCar(props) {
+  let [alertStyle, setAlertStyle] = useState("hidden");
+  let [alertMsg, setAlertMsg] = useState("");
+  let changeState = (msg, style) => {
+    setAlertMsg(msg);
+    setAlertStyle(style);
+  };
   return (
     <>
       <div className="w-full h-[45vh] min-h-[450px] mt-20">
@@ -19,11 +26,22 @@ function MyPagePreferCar(props) {
           {/* 각 옵션 제목 & 목록 */}
           <PreferOptions preferInfo={props.preferInfo} />
           {/* 변경 저장 버튼 */}
-          <div className="flex items-center justify-center w-full bg-blue-300 rounded-lg h-[18%] font-bold text-lg">
+          <div
+            className="flex items-center justify-center w-full bg-blue-300 rounded-lg h-[18%] font-bold text-lg"
+            onClick={() => {
+              /* alert 2초 동안 호출 */
+              changeState(
+                "선호 옵션이 변경되었습니다.",
+                "flex items-center justify-center w-1/3 h-10 font-bold text-white rounded-full bg-slate-600"
+              );
+              setTimeout(() => changeState("", "hidden"), 2000);
+            }}
+          >
             변경 저장
           </div>
         </div>
       </div>
+      <Alert msg={alertMsg} style={alertStyle} />
     </>
   );
 }
