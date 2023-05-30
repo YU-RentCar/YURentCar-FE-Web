@@ -1,5 +1,9 @@
-import React from "react";
+import { React } from "react";
 
+/**
+ * 사용자 계정 관리
+ * @returns
+ */
 function MyPageAccount() {
   return (
     <>
@@ -10,6 +14,7 @@ function MyPageAccount() {
             계정 관리
           </div>
         </div>
+
         {/* 계정 관리 */}
         <div className="flex flex-col justify-around items-center w-full h-[80%] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
           <div className="flex flex-col justify-between w-full h-1/3">
@@ -19,12 +24,13 @@ function MyPageAccount() {
                 회원 탈퇴
               </div>
               {/* 탈퇴 버튼 */}
-              <div className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500">
+              <button className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500">
                 탈퇴하기
-              </div>
+              </button>
             </div>
             <hr className="w-full border-black" />
           </div>
+
           <div className="flex flex-col justify-between w-full h-1/3">
             <div className="flex justify-between w-full h-[60%]">
               {/* 로그아웃 타이틀 */}
@@ -32,9 +38,9 @@ function MyPageAccount() {
                 로그아웃
               </div>
               {/* 로그아웃 버튼 */}
-              <div className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500">
+              <button className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500">
                 로그아웃
-              </div>
+              </button>
             </div>
             <hr className="w-full border-black" />
           </div>
@@ -44,4 +50,4 @@ function MyPageAccount() {
   );
 }
 
-export default MyPageAccount;
+export { MyPageAccount };

@@ -1,20 +1,31 @@
-import React from "react";
-import { useState } from "react";
-import DefaultItem from "./internalComponents/DefaultItem";
-import ChangeNickname from "./internalComponents/ChangeNickname";
+import { React, useState, useEffect } from "react";
+import { DefaultItem } from "./internalComponents/DefaultItem";
+import { ChangeNickname } from "./internalComponents/ChangeNickname";
+import { Alert } from "../popUp/Alert";
 
 /**
- *
- * @param {Object} userInfo 최상위 컴포넌트에서 받아온 사용자의 기본 정보 객체
+ * 사용자의 기본 정보
  * @returns
  */
-function MyPageUserInfo(props) {
-  // 닉네임 변경하기 전과 변경을 하는 과정의 type
-  let [type, setType] = useState("default");
-  // type 에 따라 다른 컴포넌트를 호출
-  let ContentComponent = type === "default" ? DefaultItem : ChangeNickname;
+function MyPageUserInfo() {
+  /*사용자 기본 정보 객체 */
+  let [userInfo, setUserInfo] = useState({
+    name: "홍길동",
+    nickname: "손씻은지도벌써백년",
+    phone: "010-0000-0000",
+    email: "gildong@gmail.com",
+  });
 
-  let titles = Object.keys(props.userInfo);
+  /* 기존 닉네임 보여주기 OR 닉네임 변경 */
+  let [isChange, setIsChange] = useState(false);
+  let DefaultOrChange = isChange ? ChangeNickname : DefaultItem;
+
+  /* 닉네임이 변경되었을 때 저장 */
+  let [nick, setNick] = useState(userInfo["nickname"]);
+
+  /* Alert 를 보여줄지 숨길지를 결정하는 state, Alert 를 통해 보여줄 메시지 state */
+  let [showAlert, setShowAlert] = useState(false);
+  let [alertMsg, setAlertMsg] = useState("");
 
   return (
     <>
@@ -23,31 +34,43 @@ function MyPageUserInfo(props) {
         <div className="flex items-center justify-center w-[15%] h-12 text-xl font-bold border-2 border-dashed rounded-md border-slate-400">
           기본 정보
         </div>
+
         {/* 기본 정보들 */}
         <div className="flex flex-col justify-around items-center w-full h-[90%] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
-          {titles.map((title) => {
-            return title !== "닉네임" ? (
-              // 닉네임이 아닌 경우는 기본 틀 (변경 버튼이 없음)
-              <DefaultItem
-                title={title}
-                content={props.userInfo[title]}
-                infoType={"hidden"}
-              />
-            ) : (
-              // 닉네임인 경우 (변경 버튼 추가)
-              // 버튼을 누름에 따라 바뀌는 상황 (변경 전 <-> 변경 과정)
-              <ContentComponent
-                title={title}
-                content={props.userInfo[title]}
-                infoType={"text-xl font-bold underline text-slate-400"}
-                setType={setType}
-              />
-            );
-          })}
+          {/* 이름 */}
+          <DefaultItem title="이름" content={userInfo["name"]} isNick={false} />
+
+          {/* 닉네임 */}
+          <DefaultOrChange
+            title="닉네임"
+            content={nick}
+            isNick={true}
+            isChange={setIsChange}
+            setNick={setNick}
+            alertMsg={setAlertMsg}
+            showAlert={setShowAlert}
+          />
+
+          {/* 전화번호 */}
+          <DefaultItem
+            title="전화번호"
+            content={userInfo["phone"]}
+            isNick={false}
+          />
+
+          {/* 이메일 */}
+          <DefaultItem
+            title="이메일"
+            content={userInfo["email"]}
+            isNick={false}
+          />
         </div>
       </div>
+
+      {/* 알림창 제어 */}
+      {showAlert && <Alert msg={alertMsg} />}
     </>
   );
 }
 
-export default MyPageUserInfo;
+export { MyPageUserInfo };
