@@ -15,18 +15,44 @@ function ChangeNickname(props) {
   /* 최종적으로 변경을 하기 전에 입력된 새로운 닉네임을 저장해둘 state */
   let [tmpNick, setTmpNick] = useState("");
 
+  /* 최종적으로 변경할 닉네임 state */
+  let [newNick, setNewNick] = useState("");
+
+  /* 닉네임 중복 확인 여부를 저장해둘 state */
+  /* 0 = 체크 안함, 1 = 기존과 동일, 2 = 중복o, 3 = 중복x */
+  let [dupCheck, setDupCheck] = useState(0);
+
+  /* Alert 함수 */
+  let getAlert = (msg) => {
+    props.alertMsg(msg); // 알림창 메시지
+    props.showAlert(true); // 알림창 켜기
+    setTimeout(() => props.showAlert(false), 2000); // 2초 뒤 종료
+  };
+
   return (
     <div className="flex flex-col justify-between w-full h-1/4">
       {/* 정보 타이틀 (닉네임) */}
       <div className="text-xl font-bold text-slate-400">{props.title}</div>
 
-      {/* 기존 닉네임 정보 */}
       <div className="flex flex-col justify-between w-full px-10 h-[60%]">
-        <div className="flex justify-between w-[40%]">
-          <div className="w-[40%] text-lg font-bold">기존 닉네임</div>
-          <div className="w-[60%] text-lg font-bold text-right">
-            {props.content}
+        <div className="flex justify-between w-full h-1/2">
+          {/* 기존 닉네임 정보 */}
+          <div className="flex justify-between w-[40%]">
+            <div className="w-[40%] text-lg font-bold">기존 닉네임</div>
+            <div className="w-[60%] text-lg font-bold text-right">
+              {props.content}
+            </div>
           </div>
+
+          {/* 닉네임 변경 취소 */}
+          <button
+            className="w-[12%] h-[80%] flex justify-center items-center font-bold text-xs border-2 rounded-lg bg-slate-400 mr-3"
+            onClick={() => {
+              props.isChange(false);
+            }}
+          >
+            변경 취소
+          </button>
         </div>
 
         {/* 새로운 닉네임 입력 양식 */}
@@ -45,11 +71,31 @@ function ChangeNickname(props) {
             {/* 새로운 닉네임 중복 확인 버튼 */}
             <button
               className="w-[40%] h-[80%] bg-blue-300 font-bold text-xs border-2 rounded-lg flex justify-center items-center"
-              onClick={() => {
-                /* alert 2초 동안 호출 */
-                props.alertMsg("중복된/중복되지 않은 닉네임 입니다."); // 알림창 메시지
-                props.showAlert(true); // 알림창 켜기
-                setTimeout(() => props.showAlert(false), 2000); // 2초 뒤 종료
+              onClick={async () => {
+                if (tmpNick === "") {
+                  /* 비어있는 닉네임일 때 */
+                  getAlert("닉네임을 입력해주세요.");
+                } else if (tmpNick === props.content) {
+                  /* 기존과 동일할 때 */
+                  getAlert("기존과 동일한 닉네임입니다.");
+                } else {
+                  /* 중복되었는지 아닌지 확인 필요 */
+                  /* 중복 확인 여부에 따른 setDupCheck */
+                  await fetch(
+                    `/api/v1/users/nicknames/exists?nickname=${tmpNick}`
+                  )
+                    .then((response) => response.json())
+                    .then((res) => {
+                      if (res) {
+                        setDupCheck(2);
+                        getAlert("중복된 닉네임 입니다.");
+                      } else {
+                        setDupCheck(3);
+                        setNewNick(tmpNick);
+                        getAlert("중복되지 않은 닉네임 입니다.");
+                      }
+                    });
+                }
               }}
             >
               닉네임 중복 확인
@@ -58,13 +104,38 @@ function ChangeNickname(props) {
             {/* 최종 변경 적용 버튼 */}
             <button
               className="w-[40%] h-[80%] bg-rose-500 font-bold text-xs text-white border-2 rounded-lg flex justify-center items-center"
-              onClick={() => {
-                /* alert 2초 동안 호출 */
-                props.setNick(tmpNick); // 최종 닉네임 변경
-                props.alertMsg("닉네임이 변경되었습니다."); // 알림창 메시지
-                props.showAlert(true); // 알림창 켜기
-                setTimeout(() => props.showAlert(false), 2000); // 2초 뒤 종료
-                props.isChange(false); // default 화면으로
+              onClick={async () => {
+                if (dupCheck === 0) {
+                  /* 0 = 닉네임 중복 검사 수행 x */
+                  getAlert("닉네임 중복 검사를 진행해주세요.");
+                } else if (dupCheck === 3) {
+                  /* 3 = 닉네임 변경 가능 */
+                  if (tmpNick !== newNick) {
+                    getAlert(
+                      "마지막 중복 확인과 다른 닉네임이 입력되었습니다."
+                    );
+                  } else {
+                    await fetch(`/api/v1/users/nicknames/change`, {
+                      method: "PATCH",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        username: "yoha6865@naver.com",
+                        nickname: newNick,
+                      }),
+                    }).then((response) => {
+                      if (response.status === 200) {
+                        getAlert("닉네임을 변경했습니다.");
+                        props.setNick(tmpNick);
+                        props.isChange(false);
+                      } else getAlert("닉네임 변경에 실패했습니다.");
+                    });
+                  }
+                } else {
+                  /* 1,2 = 닉네임 변경 불가 */
+                  getAlert("중복 검사를 먼저 수행해주세요.");
+                }
               }}
             >
               닉네임 변경
