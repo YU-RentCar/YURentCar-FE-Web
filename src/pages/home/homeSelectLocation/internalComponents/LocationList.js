@@ -40,11 +40,11 @@ function LocationList(props) {
   return (
     <>
       <div className={initSetting}>
-        <div className="flex flex-col items-center border-blue-500 w-full h-full rounded-xl border-[3px] overflow-y-scroll p-2">
+        <div className="flex flex-col items-center border-blue-500 w-full h-full rounded-[35px] border-[3px] overflow-y-scroll p-2">
           {props.storeLocInfo.map((value, idx) => {
             return (
               <div
-                className="flex flex-row justify-center items-center text-3xl font-bold bg-slate-100 border-[3px] border-slate-400 w-[80%] py-3 my-2 rounded-xl lists"
+                className="flex flex-row justify-center items-center text-3xl font-bold bg-slate-100 border-[3px] border-slate-400 w-[90%] py-3 my-2 rounded-xl lists"
                 onClick={handleClick}
                 id={idx}
                 key={idx}
