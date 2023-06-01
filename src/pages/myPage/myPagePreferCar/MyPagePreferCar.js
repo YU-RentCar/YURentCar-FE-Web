@@ -3,16 +3,24 @@ import { Alert } from "../popUp/Alert";
 import { DefaultItem } from "./internalComponents/DefaultItem";
 
 function MyPagePreferCar() {
-  /* 사용자 선호 차량 객체 */
+  /* 사용자 선호 차량 정보 */
   let [preferInfo, setPreferInfo] = useState({
-    차량크기: ["준중형", "중형", "대형"],
-    유종: ["전기", "휘발유", "경유"],
-    구동기: ["자동", "수동"],
-    최소인원: ["5인승", "7인승", "11인승"],
+    차량크기: ["소형", "준중형", "중형", "대형"],
+    유종: ["휘발유", "경유", "수소", "전기"],
+    트랜스미션: ["수동", "자동"],
+  });
+
+  /* 서버에 저장된 실제 사용자가 선호하는 차량 옵션 */
+  let [userPrefer, setUserPrefer] = useState({
+    carSizes: [false, false, false, true],
+    minCount: 0,
+    oilTypes: [false, false, false, false],
+    transmissions: [false, false],
   });
 
   /* 정보 객체의 title 들만 빼낸 배열 */
-  let titles = Object.keys(preferInfo);
+  let infoTitles = Object.keys(preferInfo);
+  let userTitles = Object.keys(userPrefer);
 
   /* Alert 를 보여줄지 숨길지를 결정하는 state */
   let [showAlert, setShowAlert] = useState(false);
@@ -20,7 +28,7 @@ function MyPagePreferCar() {
 
   return (
     <>
-      <div className="w-full h-[45vh] min-h-[450px] mt-20">
+      <div className="w-full h-[60vh] min-h-[700px] mt-20">
         {/* 선호 차량 타이틀 */}
         <div className="flex items-center justify-center w-[15%] h-12 text-xl font-bold border-2 border-dashed rounded-md border-slate-400">
           선호 차량
@@ -29,22 +37,55 @@ function MyPagePreferCar() {
         {/* 선호 차량 옵션들 */}
         <div className="flex flex-col justify-between items-center w-full h-[80%] bg-white border-4 rounded-md border-slate-400 mt-5 px-28 py-10">
           {/* 각 옵션 제목 & 목록 */}
-          <div className="flex justify-between w-full h-[50%]">
+          <div className="flex flex-col justify-around items-center w-full h-[80%]">
             {/* 총 4개의 옵션 */}
-            {titles.map((title, index) => {
+            {infoTitles.map((title, index) => {
               return (
-                <DefaultItem
-                  title={title}
-                  contents={preferInfo[title]}
-                  key={index}
-                />
+                <div className="flex items-center justify-between w-full h-1/5">
+                  <div className="flex items-center justify-center w-1/6 text-lg font-bold bg-blue-300 rounded-lg h-4/5">
+                    {title}
+                  </div>
+                  <div className="flex items-center justify-around w-4/5 h-4/5">
+                    {Array.from(
+                      { length: preferInfo[title].length },
+                      (v, i) => i + 1
+                    ).map((t) => {
+                      return (
+                        <div className="flex items-center justify-center w-1/5 h-full text-lg font-bold border-2 border-blue-500 rounded-lg bg-sky-50">
+                          <input
+                            type="checkbox"
+                            defaultChecked={
+                              userPrefer[userTitles[index]][t - 1]
+                            }
+                            className="w-[50%] h-[50%]"
+                          />
+                          <label className="flex items-center justify-start w-[40%]">
+                            {preferInfo[title][t - 1]}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               );
             })}
+            <div className="flex items-center justify-between w-full h-1/5">
+              <div className="flex items-center justify-center w-1/6 text-lg font-bold bg-blue-300 rounded-lg h-4/5">
+                탑승 가능 인원
+              </div>
+              <div className="flex items-center justify-center w-4/5 text-lg font-bold h-4/5">
+                <input
+                  type="number"
+                  className="w-3/4 h-full text-center border-2 border-blue-500 rounded-lg"
+                  defaultValue={userPrefer["minCount"]}
+                ></input>
+              </div>
+            </div>
           </div>
 
           {/* 변경 저장 버튼 */}
           <button
-            className="flex items-center justify-center w-full bg-blue-300 rounded-lg h-[18%] font-bold text-lg"
+            className="flex items-center justify-center w-full bg-blue-300 rounded-lg h-[15%] font-bold text-lg"
             onClick={() => {
               /* alert 2초 동안 호출 */
               setAlertMsg("정보가 변경되었습니다."); // 알림창 메시지
