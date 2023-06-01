@@ -1,12 +1,16 @@
-import logo from "./logo.svg";
 import "./App.css";
-import Nav from "./components/Nav";
+import { Routes, Route } from "react-router-dom";
+import { Nav } from "./components/Nav";
+import { MyPage } from "./pages/myPage/MyPage";
 
 function App() {
   return (
     <>
-      <div className="flex-col items-center justify-between w-full h-full bg-slate-200">
-        <Nav name="홍길동" />
+      <div className="w-full h-full bg-slate-200">
+        <Nav />
+        <Routes>
+          <Route path="/mypage" element={<MyPage />}></Route>
+        </Routes>
       </div>
     </>
   );
