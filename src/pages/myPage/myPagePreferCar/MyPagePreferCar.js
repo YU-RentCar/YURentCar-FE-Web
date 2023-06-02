@@ -1,6 +1,5 @@
 import { React, useState } from "react";
 import { Alert } from "../popUp/Alert";
-import { DefaultItem } from "./internalComponents/DefaultItem";
 
 function MyPagePreferCar() {
   /* 사용자 선호 차량 정보 */
@@ -41,17 +40,25 @@ function MyPagePreferCar() {
             {/* 총 4개의 옵션 */}
             {infoTitles.map((title, index) => {
               return (
-                <div className="flex items-center justify-between w-full h-1/5">
+                <div
+                  className="flex items-center justify-between w-full h-1/5"
+                  key={index}
+                >
+                  {/* 옵션별 타이틀 */}
                   <div className="flex items-center justify-center w-1/6 text-lg font-bold bg-blue-300 rounded-lg h-4/5">
                     {title}
                   </div>
+                  {/* 옵션별로 선택할 수 있는 항목들 */}
                   <div className="flex items-center justify-around w-4/5 h-4/5">
                     {Array.from(
                       { length: preferInfo[title].length },
                       (v, i) => i + 1
-                    ).map((t) => {
+                    ).map((t, index) => {
                       return (
-                        <div className="flex items-center justify-center w-1/5 h-full text-lg font-bold border-2 border-blue-500 rounded-lg bg-sky-50">
+                        <div
+                          className="flex items-center justify-center w-1/5 h-full text-lg font-bold border-2 border-blue-500 rounded-lg bg-sky-50"
+                          key={index}
+                        >
                           <input
                             type="checkbox"
                             defaultChecked={
@@ -69,11 +76,14 @@ function MyPagePreferCar() {
                 </div>
               );
             })}
+
             <div className="flex items-center justify-between w-full h-1/5">
+              {/* 유저가 직접 입력하는 탑승 가능 인원 */}
               <div className="flex items-center justify-center w-1/6 text-lg font-bold bg-blue-300 rounded-lg h-4/5">
                 탑승 가능 인원
               </div>
               <div className="flex items-center justify-center w-4/5 text-lg font-bold h-4/5">
+                {/* 인원 수 입력 양식 */}
                 <input
                   type="number"
                   className="w-3/4 h-full text-center border-2 border-blue-500 rounded-lg"
