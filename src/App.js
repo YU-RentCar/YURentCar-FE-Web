@@ -13,14 +13,27 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("/users/profiles?username=", {
-        withCredentials: true,
-      })
+      .post(
+        "http://localhost:8080/api/v1/auth/user-info",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      )
       .then(function (response) {
         console.log(response);
+        if (response.status === 200) {
+          nav("/home");
+        }
       })
       .catch(function (error) {
-        nav("/auth");
+        console.log(error.response);
+        if (error.response.status === 401) {
+          nav("/auth");
+        }
       });
   }, []);
 
