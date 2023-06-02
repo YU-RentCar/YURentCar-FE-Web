@@ -3,6 +3,7 @@ import { LocationList } from "./internalComponents/LocationList";
 import { Map } from "./internalComponents/Map";
 import { TimeSelectForm } from "./internalComponents/TimeSelectForm";
 import listShowIcon from "../../../assets/listShowIcon.png";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 홈 화면에서 이용 시간, 지점을 선택하는 기능을 하는 컴포넌트
@@ -12,16 +13,16 @@ import listShowIcon from "../../../assets/listShowIcon.png";
  */
 function HomeSelectLocation(props) {
   /* 컴포넌트의 초기 설정 */
-  const initSetting = props.width + " " + props.height + " min-h-[800px]";
+  const initSetting = props.width + " " + props.height;
+
+  let nav = useNavigate();
 
   /* 현재 컴포넌트들에서 사용할 state */
-  let [storeLocList, setStoreLocList] = useState([
-    "지도를 클릭해서 점포 검색!",
-  ]);
+  let [storeList, setStoreList] = useState(["지도를 클릭해서 점포 검색!"]);
 
   let [selectedStore, setSelectedStore] = useState("");
 
-  let [location, setLocation] = useState("");
+  let [province, setProvince] = useState("");
 
   let [startTime, setStartTime] = useState({
     date: "2023-05-08",
@@ -38,12 +39,13 @@ function HomeSelectLocation(props) {
   if (isFold) {
     return (
       <>
-        <div className={props.width + " h-[120px]"}>
-          <div className="flex flex-row items-center justify-around h-full bg-white">
+        <div className={props.width}>
+          <div className="flex flex-row items-center justify-around h-full py-3 my-5 bg-white">
             <div className="w-[28%] h-[100px] bg-white">
               {/* 고정 시작 시간 */}
               <div className="relative flex justify-around items-center border-[5px] border-dashed border-slate-200 h-full">
-                <span className="absolute text-[1.5rem] px-4 left-2 top-[-24px] h-fit bg-white text-slate-600 font-extrabold">
+                <div className="absolute top-[-10px] left-[20px] w-[100px] h-6 bg-white"></div>
+                <span className="absolute text-[1.5rem] px-4 left-2 top-[-20px] text-slate-600 font-extrabold">
                   시작 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
@@ -57,7 +59,8 @@ function HomeSelectLocation(props) {
             <div className="w-[28%] h-[100px] bg-white">
               {/* 고정 종료 시간 */}
               <div className="relative flex justify-around items-center border-[5px] border-dashed border-slate-200 h-full ">
-                <span className="absolute text-[1.5rem] px-4 left-2 top-[-24px] h-fit bg-white text-slate-600 font-extrabold">
+                <div className="absolute top-[-10px] left-[20px] w-[100px] h-6 bg-white"></div>
+                <span className="absolute text-[1.5rem] px-4 left-2 top-[-20px] h-fit text-slate-600 font-extrabold">
                   종료 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
@@ -72,7 +75,7 @@ function HomeSelectLocation(props) {
               {/* 지점 위치 */}
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-2xl font-extrabold text-amber-500">
-                  {location}
+                  {province}
                 </div>
                 <div className="text-3xl font-extrabold text-blue-500 ">
                   {selectedStore}
@@ -86,6 +89,7 @@ function HomeSelectLocation(props) {
                   alt="unfold"
                   onClick={() => {
                     setIsFold(false);
+                    nav("/home");
                   }}
                 />
               </button>
@@ -98,9 +102,9 @@ function HomeSelectLocation(props) {
     return (
       <>
         <div className={initSetting}>
-          <div className="flex flex-col items-center justify-start w-full h-full overflow-y-scroll bg-white">
+          <div className="flex flex-col items-center justify-start w-full h-full my-5 overflow-y-scroll min-h-[600px] bg-white">
             {/* 날짜 시간 선택 컴포넌트 */}
-            <div className="flex flex-row justify-between mx-5 w-[96%] mt-3">
+            <div className="flex flex-row justify-between w-full px-5 my-3">
               <TimeSelectForm
                 width="w-[49%]"
                 legend="시작 시간"
@@ -114,20 +118,18 @@ function HomeSelectLocation(props) {
               ></TimeSelectForm>
             </div>
 
-            <div className="flex flex-row justify-between mx-5 w-[96%] mt-8 flex-grow">
-              {/*! 지도 컴포넌트는 svg 크기 조절 문제로 인해 크기가 일정수준 정해져 있음 */}
-
+            <div className="flex flex-row items-center justify-between flex-grow w-full px-5">
               <Map
-                setStoreLocList={setStoreLocList}
-                setLocation={setLocation}
+                setStoreLocList={setStoreList}
+                setLocation={setProvince}
               ></Map>
 
-              <div className="flex flex-col items-center justify-start w-[49%] max-h-[600px]">
+              <div className="flex flex-col items-center justify-center w-[49%] h-full">
                 {/* 지점 컴포넌트 */}
                 <LocationList
                   width="w-full"
-                  height="h-[70%]"
-                  storeLocInfo={storeLocList}
+                  height="h-[60%]"
+                  storeLocInfo={storeList}
                   setSelectedStore={setSelectedStore}
                 ></LocationList>
 
@@ -135,9 +137,9 @@ function HomeSelectLocation(props) {
                   {/* 리마인더 */}
                   <div className="flex flex-col justify-center font-bold text-l text-amber-700">
                     <div className="mb-1 text-3xl text-amber-500">
-                      {location}
+                      {province}
                     </div>
-                    <div className="mb-3 text-3xl text-blue-500">
+                    <div className="mb-3 text-3xl text-blue-500 ">
                       {selectedStore}
                     </div>
                     <div>
@@ -152,6 +154,7 @@ function HomeSelectLocation(props) {
                     className="bg-rose-500 w-1/2 h-1/2 rounded-2xl text-[40px] text-white font-black"
                     onClick={() => {
                       setIsFold(true);
+                      nav("/home/inquirecar");
                     }}
                   >
                     검색하기
