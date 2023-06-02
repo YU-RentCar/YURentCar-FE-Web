@@ -14,7 +14,7 @@ function CheckboxForm(props) {
     <>
       <div className="flex flex-row flex-wrap justify-between w-[90%] px-2">
         {props.inputArray.map((elm, idx) => (
-          <div>
+          <div className="mr-1 ">
             <input
               type="checkbox"
               key={idx}
