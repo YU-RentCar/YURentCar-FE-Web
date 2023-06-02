@@ -8,13 +8,25 @@ import { Alert } from "../popUp/Alert";
  * @returns
  */
 function MyPageUserInfo() {
-  /*사용자 기본 정보 객체 */
+  /* 사용자 기본 정보 객체 */
   let [userInfo, setUserInfo] = useState({
     name: "홍길동",
     nickname: "손씻은지도벌써백년",
-    phone: "010-0000-0000",
-    email: "gildong@gmail.com",
+    phoneNumber: "010-0000-0000",
+    username: "gildong@gmail.com",
   });
+
+  /* 서버로부터 사용자 정보 전달 받음 */
+  useEffect(() => {
+    async function getUserInfo() {
+      await fetch("/api/v1/users/profiles?username=test@test")
+        .then((response) => response.json())
+        .then((result) => {
+          setUserInfo(result);
+        });
+    }
+    getUserInfo();
+  }, []);
 
   /* 기존 닉네임 보여주기 OR 닉네임 변경 */
   let [isChange, setIsChange] = useState(false);
@@ -54,14 +66,14 @@ function MyPageUserInfo() {
           {/* 전화번호 */}
           <DefaultItem
             title="전화번호"
-            content={userInfo["phone"]}
+            content={userInfo["phoneNumber"]}
             isNick={false}
           />
 
           {/* 이메일 */}
           <DefaultItem
             title="이메일"
-            content={userInfo["email"]}
+            content={userInfo["username"]}
             isNick={false}
           />
         </div>
