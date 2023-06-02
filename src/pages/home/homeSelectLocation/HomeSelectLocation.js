@@ -3,6 +3,7 @@ import { LocationList } from "./internalComponents/LocationList";
 import { Map } from "./internalComponents/Map";
 import { TimeSelectForm } from "./internalComponents/TimeSelectForm";
 import listShowIcon from "../../../assets/listShowIcon.png";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 홈 화면에서 이용 시간, 지점을 선택하는 기능을 하는 컴포넌트
@@ -13,6 +14,8 @@ import listShowIcon from "../../../assets/listShowIcon.png";
 function HomeSelectLocation(props) {
   /* 컴포넌트의 초기 설정 */
   const initSetting = props.width + " " + props.height;
+
+  let nav = useNavigate();
 
   /* 현재 컴포넌트들에서 사용할 state */
   let [storeList, setStoreList] = useState(["지도를 클릭해서 점포 검색!"]);
@@ -36,12 +39,13 @@ function HomeSelectLocation(props) {
   if (isFold) {
     return (
       <>
-        <div className={props.width + " h-[120px]"}>
-          <div className="flex flex-row items-center justify-around h-full bg-white">
+        <div className={props.width}>
+          <div className="flex flex-row items-center justify-around h-full py-3 my-5 bg-white">
             <div className="w-[28%] h-[100px] bg-white">
               {/* 고정 시작 시간 */}
               <div className="relative flex justify-around items-center border-[5px] border-dashed border-slate-200 h-full">
-                <span className="absolute text-[1.5rem] px-4 left-2 top-[-24px] h-fit bg-white text-slate-600 font-extrabold">
+                <div className="absolute top-[-10px] left-[20px] w-[100px] h-6 bg-white"></div>
+                <span className="absolute text-[1.5rem] px-4 left-2 top-[-20px] text-slate-600 font-extrabold">
                   시작 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
@@ -55,7 +59,8 @@ function HomeSelectLocation(props) {
             <div className="w-[28%] h-[100px] bg-white">
               {/* 고정 종료 시간 */}
               <div className="relative flex justify-around items-center border-[5px] border-dashed border-slate-200 h-full ">
-                <span className="absolute text-[1.5rem] px-4 left-2 top-[-24px] h-fit bg-white text-slate-600 font-extrabold">
+                <div className="absolute top-[-10px] left-[20px] w-[100px] h-6 bg-white"></div>
+                <span className="absolute text-[1.5rem] px-4 left-2 top-[-20px] h-fit text-slate-600 font-extrabold">
                   종료 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
@@ -84,6 +89,7 @@ function HomeSelectLocation(props) {
                   alt="unfold"
                   onClick={() => {
                     setIsFold(false);
+                    nav("/home");
                   }}
                 />
               </button>
@@ -148,6 +154,7 @@ function HomeSelectLocation(props) {
                     className="bg-rose-500 w-1/2 h-1/2 rounded-2xl text-[40px] text-white font-black"
                     onClick={() => {
                       setIsFold(true);
+                      nav("/home/inquirecar");
                     }}
                   >
                     검색하기
