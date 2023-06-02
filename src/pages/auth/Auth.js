@@ -7,7 +7,7 @@ function Auth() {
     <div className="flex flex-col items-center justify-center w-[1200px] h-[100vh] overflow-x-hidden mx-auto">
       <img src={Logo} alt="logo" className="object-contain w-1/3 h-1/5"></img>
       <div className="w-1/3 h-1/5">
-        <a href="http:/yurentcar.kro.kr:8080/oauth2/authorization/naver">
+        <a href="http://yurentcar.kro.kr:8080/oauth2/authorization/naver">
           <img
             src={Naver}
             alt="naver"
@@ -16,7 +16,7 @@ function Auth() {
         </a>
       </div>
       <div className="w-1/3 h-1/5">
-        <a href="http:/yurentcar.kro.kr:8080/oauth2/authorization/kakao">
+        <a href="http://yurentcar.kro.kr:8080/oauth2/authorization/kakao">
           <img
             src={Kakao}
             alt="kakao"
