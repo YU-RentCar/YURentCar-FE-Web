@@ -1,4 +1,4 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { CarCard } from "./CarCard";
 
 /**
@@ -7,6 +7,10 @@ import { CarCard } from "./CarCard";
  * @returns
  */
 function Recent(props) {
+  /* localStorage 에 저장되어있는 최근 본 차량 6대 차량 번호 */
+  let [numberList, setNumberList] = useState(
+    JSON.parse(localStorage.getItem("recent-car"))
+  );
   return (
     <>
       <div className="w-full h-[70%] mt-3">

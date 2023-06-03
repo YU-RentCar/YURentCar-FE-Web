@@ -10,7 +10,6 @@ import { Recent } from "./internalComponents/Recent";
 function MyPageRecord() {
   /* 사용자 내역 정보 */
   let [recordInfo, setRecordInfo] = useState({
-    point: 1000,
     recent: [
       ["차1", "11일 1111", "11111", "11111"],
       ["차2", "22이 2222", "22222", "22222"],
@@ -29,7 +28,7 @@ function MyPageRecord() {
       {/* 각종 내역들 */}
       <div className="flex flex-col items-center justify-between w-full pt-5 mt-5 bg-white border-4 rounded-md px-28 h-[920px] border-slate-400">
         <Reservation />
-        <Point point={recordInfo["point"]} />
+        <Point />
         <Recent recent={recordInfo["recent"]} />
       </div>
     </div>

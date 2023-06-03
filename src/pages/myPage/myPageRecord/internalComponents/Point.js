@@ -1,14 +1,36 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { PointRecord } from "../../popUp/PointRecord";
+import axios from "axios";
 
 /**
  * 포인트 내역
- * @param {number} props.point 부모에게서 받아온 사용자가 현재 보유 중인 포인트
  * @returns
  */
-function Point(props) {
+function Point() {
   /* 적립/사용 내역 상세 조회 팝업 제어 state */
   let [pointPopUp, setPointPopUp] = useState(false);
+
+  let [userPoint, setUserPoint] = useState(0);
+
+  useEffect(() => {
+    (async () => {
+      axios
+        .get("http://localhost:8080/api/v1/users/point", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then(function (response) {
+          if (response.status === 200) {
+            setUserPoint(response.data);
+          }
+        })
+        .catch(function (error) {
+          console.log(error.response);
+        });
+    })();
+  }, []);
 
   return (
     <>
@@ -22,7 +44,7 @@ function Point(props) {
 
             {/* 현재 사용자 보유 중인 포인트 */}
             <div className="flex items-center text-black">
-              현재 포인트 : {props.point}
+              현재 포인트 : {userPoint}
             </div>
           </div>
 
