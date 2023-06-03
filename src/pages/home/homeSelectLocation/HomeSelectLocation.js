@@ -24,15 +24,13 @@ function HomeSelectLocation(props) {
 
   let [province, setProvince] = useState("");
 
-  let [startTime, setStartTime] = useState({
-    date: "2023-05-08",
-    time: "08:00",
-  });
+  let [startTime, setStartTime] = useState("");
 
-  let [endTime, setEndTime] = useState({
-    date: "2023-05-12",
-    time: "14:00",
-  });
+  let [startDate, setStartDate] = useState("");
+
+  let [endTime, setEndTime] = useState("");
+
+  let [endDate, setEndDate] = useState("");
 
   let [isFold, setIsFold] = useState(props.isFold);
 
@@ -49,10 +47,10 @@ function HomeSelectLocation(props) {
                   시작 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {startTime.date}
+                  {startDate} 일
                 </div>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {startTime.time}
+                  {startTime} 시
                 </div>
               </div>
             </div>
@@ -64,10 +62,10 @@ function HomeSelectLocation(props) {
                   종료 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {endTime.date}
+                  {endDate} 일
                 </div>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {endTime.time}
+                  {endTime} 시
                 </div>
               </div>
             </div>
@@ -108,13 +106,15 @@ function HomeSelectLocation(props) {
               <TimeSelectForm
                 width="w-[49%]"
                 legend="시작 시간"
-                setDateTime={setStartTime}
+                dateSetter={setStartDate}
+                timeSetter={setStartTime}
               ></TimeSelectForm>
 
               <TimeSelectForm
                 width="w-[49%]"
                 legend="종료 시간"
-                setDateTime={setEndTime}
+                dateSetter={setEndDate}
+                timeSetter={setEndTime}
               ></TimeSelectForm>
             </div>
 
@@ -143,10 +143,10 @@ function HomeSelectLocation(props) {
                       {selectedStore}
                     </div>
                     <div>
-                      시작 시간 : {startTime.date} / {startTime.time}
+                      시작 시간 : {startDate} -- {startTime} 시
                     </div>
                     <div>
-                      종료 시간 : {endTime.date} / {endTime.time}
+                      종료 시간 : {endDate} -- {endTime} 시
                     </div>
                   </div>
 
