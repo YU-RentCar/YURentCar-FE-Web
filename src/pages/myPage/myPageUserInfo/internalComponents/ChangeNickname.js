@@ -126,8 +126,7 @@ function ChangeNickname(props) {
                       .patch(
                         `http://localhost:8080/api/v1/users/nicknames`,
                         {
-                          username: userInfo.username,
-                          nickname: newNick,
+                          nickName: newNick,
                         },
                         {
                           headers: {

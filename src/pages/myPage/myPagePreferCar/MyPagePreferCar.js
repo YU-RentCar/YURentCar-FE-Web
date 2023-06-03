@@ -1,29 +1,54 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { Alert } from "../popUp/Alert";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { changeUserPrefer } from "../../../store.js";
 
 function MyPagePreferCar() {
-  /* 사용자 선호 차량 정보 */
-  let [preferInfo, setPreferInfo] = useState({
-    차량크기: ["소형", "준중형", "중형", "대형"],
-    유종: ["휘발유", "경유", "수소", "전기"],
-    트랜스미션: ["수동", "자동"],
-  });
-
-  /* 서버에 저장된 실제 사용자가 선호하는 차량 옵션 */
-  let [userPrefer, setUserPrefer] = useState({
-    carSizes: [false, false, false, true],
-    minCount: 0,
-    oilTypes: [false, false, false, false],
-    transmissions: [false, false],
-  });
+  let userPrefer = useSelector((state) => state.userPrefer);
+  let preferInfo = useSelector((state) => state.preferInfo);
+  let dispatch = useDispatch();
 
   /* 정보 객체의 title 들만 빼낸 배열 */
   let infoTitles = Object.keys(preferInfo);
-  let userTitles = Object.keys(userPrefer);
+  let [userTitles, setUserTitles] = useState([
+    "carSizes",
+    "oilTypes",
+    "transmissions",
+    "minCount",
+  ]);
 
   /* Alert 를 보여줄지 숨길지를 결정하는 state */
   let [showAlert, setShowAlert] = useState(false);
   let [alertMsg, setAlertMsg] = useState("");
+
+  /* Alert 함수 */
+  let getAlert = (msg) => {
+    setAlertMsg(msg); // 알림창 메시지
+    setShowAlert(true); // 알림창 켜기
+    setTimeout(() => setShowAlert(false), 2000); // 2초 뒤 종료
+  };
+
+  useEffect(() => {
+    (async () => {
+      await axios
+        .get("http://localhost:8080/api/v1/users/prefer-filter", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.data);
+            dispatch(changeUserPrefer(response.data));
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+        });
+    })();
+  }, []);
 
   return (
     <>
@@ -53,13 +78,14 @@ function MyPagePreferCar() {
                     {Array.from(
                       { length: preferInfo[title].length },
                       (v, i) => i + 1
-                    ).map((t, index) => {
+                    ).map((t) => {
                       return (
                         <div
                           className="flex items-center justify-center w-1/5 h-full text-lg font-bold border-2 border-blue-500 rounded-lg bg-sky-50"
-                          key={index}
+                          key={t}
                         >
                           <input
+                            id={userTitles[index] + `${t - 1}`}
                             type="checkbox"
                             defaultChecked={
                               userPrefer[userTitles[index]][t - 1]
@@ -85,6 +111,7 @@ function MyPagePreferCar() {
               <div className="flex items-center justify-center w-4/5 text-lg font-bold h-4/5">
                 {/* 인원 수 입력 양식 */}
                 <input
+                  id="minCount"
                   type="number"
                   className="w-3/4 h-full text-center border-2 border-blue-500 rounded-lg"
                   defaultValue={userPrefer["minCount"]}
@@ -96,11 +123,49 @@ function MyPagePreferCar() {
           {/* 변경 저장 버튼 */}
           <button
             className="flex items-center justify-center w-full bg-blue-300 rounded-lg h-[15%] font-bold text-lg"
-            onClick={() => {
-              /* alert 2초 동안 호출 */
-              setAlertMsg("정보가 변경되었습니다."); // 알림창 메시지
-              setShowAlert(true); // 알림창 켜기
-              setTimeout(() => setShowAlert(false), 2000); // 2초 뒤 종료
+            onClick={async () => {
+              let tmpPrefer = {
+                carSizes: [false, false, false, false],
+                minCount: 0,
+                oilTypes: [false, false, false, false],
+                transmissions: [false, false],
+              };
+              for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < tmpPrefer[userTitles[i]].length; j++) {
+                  tmpPrefer[userTitles[i]][j] = document.getElementById(
+                    [userTitles[i]] + j
+                  ).checked;
+                }
+              }
+              tmpPrefer["minCount"] = document.getElementById("minCount").value;
+              console.log(tmpPrefer);
+              await axios
+                .patch(
+                  "http://localhost:8080/api/v1/users/prefer-filter",
+                  {
+                    carSizes: tmpPrefer.carSizes,
+                    minCount: tmpPrefer.minCount,
+                    oilTypes: tmpPrefer.oilTypes,
+                    transmissions: tmpPrefer.transmissions,
+                  },
+                  {
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    withCredentials: true,
+                  }
+                )
+                .then((response) => {
+                  if (response.status === 200) {
+                    /* alert 2초 동안 호출 */
+                    dispatch(changeUserPrefer(tmpPrefer));
+                    getAlert("정보가 변경되었습니다.");
+                  }
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                  getAlert("정보 변경에 실패했습니다.");
+                });
             }}
           >
             변경 저장

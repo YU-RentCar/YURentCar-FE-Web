@@ -12,7 +12,6 @@ import { changeUserInfo } from "../../../store.js";
  */
 function MyPageUserInfo() {
   /* 사용자 기본 정보 객체 */
-  let userInfo = useSelector((state) => state.userInfo);
   let dispatch = useDispatch();
 
   /* 기존 닉네임 보여주기 OR 닉네임 변경 */
@@ -27,16 +26,12 @@ function MyPageUserInfo() {
   useEffect(() => {
     (async () => {
       await axios
-        .get(
-          `http://localhost:8080/api/v1/users/profiles?username=${userInfo.username}`,
-          {},
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        )
+        .get(`http://localhost:8080/api/v1/users/profiles`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
         .then(function (response) {
           if (response.status === 200) {
             dispatch(changeUserInfo(response.data));

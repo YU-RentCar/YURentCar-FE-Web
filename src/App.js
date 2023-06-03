@@ -7,34 +7,41 @@ import { HomeInquireCar } from "./pages/home/homeInquireCar/HomeInquireCar";
 import { Auth } from "./pages/auth/Auth";
 import axios from "axios";
 import { useEffect } from "react";
+import { changeUserInfo } from "./store.js";
+import { useDispatch } from "react-redux";
 
 function App() {
   let nav = useNavigate();
+  let dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .post(
-        "http://localhost:8080/api/v1/auth/user-info",
-        {},
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-        if (response.status === 200) {
-          nav("/home");
-        }
-      })
-      .catch(function (error) {
-        console.log(error.response);
-        if (error.response.status === 401) {
-          nav("/auth");
-        }
-      });
+    let getUserData = async () => {
+      await axios
+        .post(
+          "http://localhost:8080/api/v1/auth/user-info",
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            dispatch(changeUserInfo(response.data));
+            nav("/home");
+          }
+        })
+        .catch((error) => {
+          console.log(error.response);
+          if (error.response.status === 401) {
+            nav("/auth");
+          }
+        });
+    };
+    getUserData();
   }, []);
 
   return (
