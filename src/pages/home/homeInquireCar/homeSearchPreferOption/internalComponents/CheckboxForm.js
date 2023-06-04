@@ -7,8 +7,7 @@ import { useState } from "react";
  * @param {[bool]} props.defaultCheckedList 부모에게 받아온 기본 체크 리스트
  */
 function CheckboxForm(props) {
-  console.log("test : " + props.defaultCheckedList);
-
+  /* 내부에서 사용할 체크된 state */
   let [innerCheckedList, setInnerCheckedList] = useState([
     ...props.defaultCheckedList,
   ]);
@@ -31,6 +30,7 @@ function CheckboxForm(props) {
                 innerCheckedList[idx] = !innerCheckedList[idx];
                 setInnerCheckedList(innerCheckedList);
 
+                /* setCheckedList 통해 체크된 항목을 상위 컴포넌트로 보냄 */
                 props.setCheckedList(innerCheckedList);
                 console.log(innerCheckedList);
               }}

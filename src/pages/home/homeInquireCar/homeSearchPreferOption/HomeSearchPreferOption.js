@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckboxForm } from "./internalComponents/CheckboxForm";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { changeUserPrefer } from "../../../../store";
 
 /**
  * 차량의 옵션을 선택하는 컴포넌트.
@@ -10,6 +12,7 @@ import { useSelector } from "react-redux";
 function HomeSearchPreferOption(props) {
   const initSetting = props.width + " " + props.height;
 
+  /* 사용자가 선택했던 지점을 redux store 에서 받아옴 */
   const selectedRentalInfo = useSelector((state) => {
     return state.selectedRentalInfo;
   });
@@ -21,7 +24,33 @@ function HomeSearchPreferOption(props) {
     return state.userPrefer;
   });
 
-  /* 이후 다양한 옵션들을 추가할 예정 */
+  let dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      await axios
+        .get("http://localhost:8080/api/v1/users/prefer-filter", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response.data);
+
+            /* store로 response를 보낸다. 이 안에서 state를 초기화 하는 방법을 알 수 없어서 이런 방법을 쓴다. */
+            dispatch(changeUserPrefer(response.data));
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("error!");
+        });
+    })();
+  }, []);
+
+  /* store에 있는 state들을 받아온다. */
   let [sizeCheckedList, setSizeCheckedList] = useState([
     ...userPrefer.carSizes,
   ]);
@@ -45,7 +74,7 @@ function HomeSearchPreferOption(props) {
           <CheckboxForm
             inputArray={preferTitle.차량크기}
             setCheckedList={setSizeCheckedList}
-            defaultCheckedList={userPrefer.carSizes}
+            defaultCheckedList={sizeCheckedList}
           ></CheckboxForm>
           <div className="w-1/2 text-center px-4 py-1 border-dashed rounded-md border-slate-200 border-[4px]">
             차량 유종
@@ -53,7 +82,7 @@ function HomeSearchPreferOption(props) {
           <CheckboxForm
             inputArray={preferTitle.유종}
             setCheckedList={setOilCheckedList}
-            defaultCheckedList={userPrefer.oilTypes}
+            defaultCheckedList={oilCheckedList}
           ></CheckboxForm>
           <div className="w-1/2 text-center px-4 py-1 border-dashed rounded-md border-slate-200 border-[4px]">
             자동/수동
@@ -61,19 +90,20 @@ function HomeSearchPreferOption(props) {
           <CheckboxForm
             inputArray={preferTitle.트랜스미션}
             setCheckedList={setTransCheckedList}
-            defaultCheckedList={userPrefer.transmissions}
+            defaultCheckedList={transCheckedList}
           ></CheckboxForm>
           <label htmlFor="countPeople">탑승 인원 수</label>
           <input
             type="number"
             id="countPeople"
+            min={1}
+            max={10}
             className="w-1/2 p-4 border-[2px] border-blue-500 rounded-md text-center"
             defaultValue={userPrefer.minCount}
           />
           <button
             className="w-4/5 px-6 py-2 text-white rounded-md bg-rose-500"
             onClick={() => {
-              console.log(selectedRentalInfo);
               const temp = {
                 size: sizeCheckedList,
                 oil: oilCheckedList,
@@ -81,6 +111,7 @@ function HomeSearchPreferOption(props) {
                 min: document.querySelector("#countPeople").value,
               };
               console.log(temp);
+              console.log(selectedRentalInfo);
             }}
           >
             선택 옵션 차량 검색
