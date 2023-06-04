@@ -65,13 +65,65 @@ let userPrefer = createSlice({
   },
 });
 
+/**
+ * 사용자가 선택한 시작, 종료 날짜, 시간, 지점, 지역 저장
+ *
+ * 사용 컴포넌트
+ * Home
+ */
+let selectedRentalInfo = createSlice({
+  name: "selectedRentalInfo",
+  initialState: {
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    province: "",
+    store: "",
+  },
+  reducers: {
+    changeRentalInfo(state, info) {
+      state = info.payload;
+      return state;
+    },
+  },
+});
+
+/**
+ * 사용자가 선택한 지방, 지점 선택
+ *
+ * 사용 컴포넌트
+ * Home
+ */
+let selectedStore = createSlice({
+  name: "selectedStore",
+  initialState: {
+    province: "",
+    store: "",
+  },
+  reducers: {
+    changeProvince(state, info) {
+      state.province = info.payload;
+      return state;
+    },
+    changeStore(state, info) {
+      state.store = info.payload;
+      return state;
+    },
+  },
+});
+
 export default configureStore({
   reducer: {
     userInfo: userInfo.reducer,
     userPrefer: userPrefer.reducer,
     preferInfo: preferInfo.reducer,
+    selectedRentalInfo: selectedRentalInfo.reducer,
+    selectedStore: selectedStore.reducer,
   },
 });
 
 export let { changeUserInfo, changeNickname } = userInfo.actions;
 export let { changeUserPrefer } = userPrefer.actions;
+export let { changeRentalInfo } = selectedRentalInfo.actions;
+export let { changeProvince, changeStore } = selectedStore.actions;

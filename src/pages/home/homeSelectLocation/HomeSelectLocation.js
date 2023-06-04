@@ -4,6 +4,8 @@ import { Map } from "./internalComponents/Map";
 import { TimeSelectForm } from "./internalComponents/TimeSelectForm";
 import listShowIcon from "../../../assets/listShowIcon.png";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeRentalInfo } from "../../../store";
 
 /**
  * 홈 화면에서 이용 시간, 지점을 선택하는 기능을 하는 컴포넌트
@@ -17,20 +19,26 @@ function HomeSelectLocation(props) {
 
   let nav = useNavigate();
 
+  let rentalInfo = useSelector((state) => {
+    return state.selectedRentalInfo;
+  });
+
+  let dispatch = useDispatch();
+
   /* 현재 컴포넌트들에서 사용할 state */
   let [storeList, setStoreList] = useState(["지도를 클릭해서 점포 검색!"]);
 
-  let [selectedStore, setSelectedStore] = useState("");
+  let [selectedStore, setSelectedStore] = useState(null);
 
-  let [province, setProvince] = useState("");
+  let [province, setProvince] = useState(null);
 
-  let [startTime, setStartTime] = useState("");
+  let [startTime, setStartTime] = useState(null);
 
-  let [startDate, setStartDate] = useState("");
+  let [startDate, setStartDate] = useState(null);
 
-  let [endTime, setEndTime] = useState("");
+  let [endTime, setEndTime] = useState(null);
 
-  let [endDate, setEndDate] = useState("");
+  let [endDate, setEndDate] = useState(null);
 
   let [isFold, setIsFold] = useState(props.isFold);
 
@@ -153,8 +161,28 @@ function HomeSelectLocation(props) {
                   <button
                     className="bg-rose-500 w-1/2 h-1/2 rounded-2xl text-[40px] text-white font-black"
                     onClick={() => {
-                      setIsFold(true);
-                      nav("/home/inquirecar");
+                      if (
+                        startDate &&
+                        endDate &&
+                        startTime &&
+                        endTime &&
+                        province &&
+                        selectedStore
+                      ) {
+                        setIsFold(true);
+                        nav("/home/inquirecar");
+                        let rentalInfoObj = {
+                          startDate: startDate,
+                          endDate: endDate,
+                          startTime: startTime,
+                          endTime: endTime,
+                          province: province,
+                          store: selectedStore,
+                        };
+                        dispatch(changeRentalInfo(rentalInfoObj));
+                      } else {
+                        alert("다 체크해라!");
+                      }
                     }}
                   >
                     검색하기
