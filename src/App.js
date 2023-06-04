@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { MyPage } from "./pages/myPage/MyPage";
 import { Home } from "./pages/home/Home";
@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 function App() {
   let nav = useNavigate();
   let dispatch = useDispatch();
+  let location = useLocation();
 
   useEffect(() => {
     let getUserData = async () => {
@@ -31,7 +32,8 @@ function App() {
           console.log(response);
           if (response.status === 200) {
             dispatch(changeUserInfo(response.data));
-            nav("/home");
+            if (location.pathname.split("/")[1] === "") nav("/home");
+            else nav("/" + location.pathname.split("/")[1]);
           }
         })
         .catch((error) => {
