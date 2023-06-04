@@ -4,11 +4,14 @@ import { useState } from "react";
  * 체크박스 형태의 다중선택이 가능한 컴포넌트
  * @param {[string]} props.inputArray 부모에게 받아온 체크박스로 만들어줄 목록들
  * @param {setter} props.setCheckedList 부모에게 받아온 체크 여부를 확인하는 배열의 setter 내부는 [true, false] 같이 이루어진다.
+ * @param {[bool]} props.defaultCheckedList 부모에게 받아온 기본 체크 리스트
  */
 function CheckboxForm(props) {
-  let [innerCheckedList, setInnerCheckedList] = useState(
-    new Array(props.inputArray.length).fill(false)
-  );
+  console.log("test : " + props.defaultCheckedList);
+
+  let [innerCheckedList, setInnerCheckedList] = useState([
+    ...props.defaultCheckedList,
+  ]);
 
   return (
     <>
@@ -19,6 +22,7 @@ function CheckboxForm(props) {
               type="checkbox"
               key={idx}
               id={elm}
+              defaultChecked={innerCheckedList[idx]}
               onChange={(e) => {
                 let idx = props.inputArray.indexOf(e.target.id);
 
