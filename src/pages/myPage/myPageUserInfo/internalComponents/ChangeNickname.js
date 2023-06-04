@@ -1,17 +1,21 @@
 import { React, useState } from "react";
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { changeNickname } from "../../../../store.js";
 
 /**
  * 닉네임을 변경하는 경우
  * @param {string} props.title 부모에게서 받아온 어떤 정보인지 title
- * @param {string} props.content 부모에게서 받아온 title 에 맞는 내용
- * @param {string} props.isNick 부모에게서 받아온 정보가 닉네임인지 여부
  * @param {setter} props.isChange 부모에게 받아온 기존 닉네임 보여주기 or 닉네임 변경 상태 변경 useState setter
- * @param {setter} props.setNick 부모에게서 받아온 새로운 닉네임 저장 useState setter
  * @param {setter} props.alertMsg 부모에게서 받아온 알림창에 띄울 메시지 setter
  * @param {setter} props.showAlert 부모에게서 받아온 알림창 띄울지 여부 결정 setter
  * @returns
  */
 function ChangeNickname(props) {
+  /* 유저 정보 객체 */
+  let userInfo = useSelector((state) => state.userInfo);
+  let dispatch = useDispatch();
+
   /* 최종적으로 변경을 하기 전에 입력된 새로운 닉네임을 저장해둘 state */
   let [tmpNick, setTmpNick] = useState("");
 
@@ -40,7 +44,7 @@ function ChangeNickname(props) {
           <div className="flex justify-between w-[40%]">
             <div className="w-[40%] text-lg font-bold">기존 닉네임</div>
             <div className="w-[60%] text-lg font-bold text-right">
-              {props.content}
+              {userInfo.nickname}
             </div>
           </div>
 
@@ -81,12 +85,12 @@ function ChangeNickname(props) {
                 } else {
                   /* 중복되었는지 아닌지 확인 필요 */
                   /* 중복 확인 여부에 따른 setDupCheck */
-                  await fetch(
-                    `/api/v1/users/nicknames/exists?nickname=${tmpNick}`
-                  )
-                    .then((response) => response.json())
-                    .then((res) => {
-                      if (res) {
+                  await axios
+                    .get(
+                      `http://localhost:8080/api/v1/users/nicknames/exists?nickname=${tmpNick}`
+                    )
+                    .then((response) => {
+                      if (response.data) {
                         setDupCheck(2);
                         getAlert("중복된 닉네임 입니다.");
                       } else {
@@ -94,6 +98,9 @@ function ChangeNickname(props) {
                         setNewNick(tmpNick);
                         getAlert("중복되지 않은 닉네임 입니다.");
                       }
+                    })
+                    .catch((error) => {
+                      console.log(error.response);
                     });
                 }
               }}
@@ -115,22 +122,30 @@ function ChangeNickname(props) {
                       "마지막 중복 확인과 다른 닉네임이 입력되었습니다."
                     );
                   } else {
-                    await fetch(`/api/v1/users/nicknames/change`, {
-                      method: "PATCH",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        username: "yoha6865@naver.com",
-                        nickname: newNick,
-                      }),
-                    }).then((response) => {
-                      if (response.status === 200) {
-                        getAlert("닉네임을 변경했습니다.");
-                        props.setNick(tmpNick);
-                        props.isChange(false);
-                      } else getAlert("닉네임 변경에 실패했습니다.");
-                    });
+                    await axios
+                      .patch(
+                        `http://localhost:8080/api/v1/users/nicknames`,
+                        {
+                          nickName: newNick,
+                        },
+                        {
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          withCredentials: true,
+                        }
+                      )
+                      .then((response) => {
+                        if (response.status === 200) {
+                          getAlert("닉네임을 변경했습니다.");
+                          dispatch(changeNickname(newNick));
+                          props.isChange(false);
+                        }
+                      })
+                      .catch((error) => {
+                        console.log(error.response);
+                        getAlert("닉네임 변경에 실패했습니다.");
+                      });
                   }
                 } else {
                   /* 1,2 = 닉네임 변경 불가 */

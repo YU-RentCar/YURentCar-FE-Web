@@ -4,6 +4,8 @@ import { Map } from "./internalComponents/Map";
 import { TimeSelectForm } from "./internalComponents/TimeSelectForm";
 import listShowIcon from "../../../assets/listShowIcon.png";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { changeRentalInfo } from "../../../store";
 
 /**
  * 홈 화면에서 이용 시간, 지점을 선택하는 기능을 하는 컴포넌트
@@ -17,22 +19,26 @@ function HomeSelectLocation(props) {
 
   let nav = useNavigate();
 
+  let rentalInfo = useSelector((state) => {
+    return state.selectedRentalInfo;
+  });
+
+  let dispatch = useDispatch();
+
   /* 현재 컴포넌트들에서 사용할 state */
   let [storeList, setStoreList] = useState(["지도를 클릭해서 점포 검색!"]);
 
-  let [selectedStore, setSelectedStore] = useState("");
+  let [selectedStore, setSelectedStore] = useState(null);
 
-  let [province, setProvince] = useState("");
+  let [province, setProvince] = useState(null);
 
-  let [startTime, setStartTime] = useState({
-    date: "2023-05-08",
-    time: "08:00",
-  });
+  let [startTime, setStartTime] = useState(null);
 
-  let [endTime, setEndTime] = useState({
-    date: "2023-05-12",
-    time: "14:00",
-  });
+  let [startDate, setStartDate] = useState(null);
+
+  let [endTime, setEndTime] = useState(null);
+
+  let [endDate, setEndDate] = useState(null);
 
   let [isFold, setIsFold] = useState(props.isFold);
 
@@ -49,10 +55,10 @@ function HomeSelectLocation(props) {
                   시작 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {startTime.date}
+                  {startDate} 일
                 </div>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {startTime.time}
+                  {startTime} 시
                 </div>
               </div>
             </div>
@@ -64,10 +70,10 @@ function HomeSelectLocation(props) {
                   종료 시간
                 </span>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {endTime.date}
+                  {endDate} 일
                 </div>
                 <div className="border-blue-500 border-[2px] rounded-full h-fit bg-sky-50 py-3 px-6 font-extrabold text-xl">
-                  {endTime.time}
+                  {endTime} 시
                 </div>
               </div>
             </div>
@@ -108,13 +114,15 @@ function HomeSelectLocation(props) {
               <TimeSelectForm
                 width="w-[49%]"
                 legend="시작 시간"
-                setDateTime={setStartTime}
+                dateSetter={setStartDate}
+                timeSetter={setStartTime}
               ></TimeSelectForm>
 
               <TimeSelectForm
                 width="w-[49%]"
                 legend="종료 시간"
-                setDateTime={setEndTime}
+                dateSetter={setEndDate}
+                timeSetter={setEndTime}
               ></TimeSelectForm>
             </div>
 
@@ -143,18 +151,38 @@ function HomeSelectLocation(props) {
                       {selectedStore}
                     </div>
                     <div>
-                      시작 시간 : {startTime.date} / {startTime.time}
+                      시작 시간 : {startDate} -- {startTime} 시
                     </div>
                     <div>
-                      종료 시간 : {endTime.date} / {endTime.time}
+                      종료 시간 : {endDate} -- {endTime} 시
                     </div>
                   </div>
 
                   <button
                     className="bg-rose-500 w-1/2 h-1/2 rounded-2xl text-[40px] text-white font-black"
                     onClick={() => {
-                      setIsFold(true);
-                      nav("/home/inquirecar");
+                      if (
+                        startDate &&
+                        endDate &&
+                        startTime &&
+                        endTime &&
+                        province &&
+                        selectedStore
+                      ) {
+                        setIsFold(true);
+                        nav("/home/inquirecar");
+                        let rentalInfoObj = {
+                          startDate: startDate,
+                          endDate: endDate,
+                          startTime: startTime,
+                          endTime: endTime,
+                          province: province,
+                          store: selectedStore,
+                        };
+                        dispatch(changeRentalInfo(rentalInfoObj));
+                      } else {
+                        alert("다 체크해라!");
+                      }
                     }}
                   >
                     검색하기

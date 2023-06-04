@@ -1,7 +1,10 @@
 import { React, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import { DefaultItem } from "./internalComponents/DefaultItem";
 import { ChangeNickname } from "./internalComponents/ChangeNickname";
 import { Alert } from "../popUp/Alert";
+import { changeUserInfo } from "../../../store.js";
 
 /**
  * 사용자의 기본 정보
@@ -9,35 +12,36 @@ import { Alert } from "../popUp/Alert";
  */
 function MyPageUserInfo() {
   /* 사용자 기본 정보 객체 */
-  let [userInfo, setUserInfo] = useState({
-    name: "홍길동",
-    nickname: "손씻은지도벌써백년",
-    phoneNumber: "010-0000-0000",
-    username: "gildong@gmail.com",
-  });
-
-  /* 서버로부터 사용자 정보 전달 받음 */
-  useEffect(() => {
-    async function getUserInfo() {
-      await fetch("/api/v1/users/profiles?username=test@test")
-        .then((response) => response.json())
-        .then((result) => {
-          setUserInfo(result);
-        });
-    }
-    getUserInfo();
-  }, []);
+  let dispatch = useDispatch();
 
   /* 기존 닉네임 보여주기 OR 닉네임 변경 */
   let [isChange, setIsChange] = useState(false);
   let DefaultOrChange = isChange ? ChangeNickname : DefaultItem;
 
-  /* 닉네임이 변경되었을 때 저장 */
-  let [nick, setNick] = useState(userInfo["nickname"]);
-
   /* Alert 를 보여줄지 숨길지를 결정하는 state, Alert 를 통해 보여줄 메시지 state */
   let [showAlert, setShowAlert] = useState(false);
   let [alertMsg, setAlertMsg] = useState("");
+
+  /* 서버로부터 사용자 정보 전달 받음 */
+  useEffect(() => {
+    (async () => {
+      await axios
+        .get(`http://localhost:8080/api/v1/users/profiles`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .then(function (response) {
+          if (response.status === 200) {
+            dispatch(changeUserInfo(response.data));
+          }
+        })
+        .catch(function (error) {
+          console.log(error.response);
+        });
+    })();
+  }, []);
 
   return (
     <>
@@ -50,32 +54,21 @@ function MyPageUserInfo() {
         {/* 기본 정보들 */}
         <div className="flex flex-col justify-around items-center w-full h-[90%] bg-white border-4 rounded-md border-slate-400 px-28 py-5 mt-5">
           {/* 이름 */}
-          <DefaultItem title="이름" content={userInfo["name"]} isNick={false} />
+          <DefaultItem title="이름" />
 
           {/* 닉네임 */}
           <DefaultOrChange
             title="닉네임"
-            content={nick}
-            isNick={true}
             isChange={setIsChange}
-            setNick={setNick}
             alertMsg={setAlertMsg}
             showAlert={setShowAlert}
           />
 
           {/* 전화번호 */}
-          <DefaultItem
-            title="전화번호"
-            content={userInfo["phoneNumber"]}
-            isNick={false}
-          />
+          <DefaultItem title="전화번호" />
 
           {/* 이메일 */}
-          <DefaultItem
-            title="이메일"
-            content={userInfo["username"]}
-            isNick={false}
-          />
+          <DefaultItem title="이메일" />
         </div>
       </div>
 
