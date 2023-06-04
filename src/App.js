@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { MyPage } from "./pages/myPage/MyPage";
 import { Home } from "./pages/home/Home";
@@ -10,6 +10,7 @@ import { useEffect } from "react";
 
 function App() {
   let nav = useNavigate();
+  let location = useLocation();
 
   useEffect(() => {
     axios
@@ -26,7 +27,8 @@ function App() {
       .then(function (response) {
         console.log(response);
         if (response.status === 200) {
-          nav("/home");
+          if (location.pathname.split("/")[1] === "") nav("/home");
+          else nav("/" + location.pathname.split("/")[1]);
         }
       })
       .catch(function (error) {
