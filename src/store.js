@@ -39,11 +39,6 @@ let preferInfo = createSlice({
 });
 
 /**
- * 사용자 선호 차량
- *
- */
-
-/**
  * 사용자의 선호 차량 옵션을 담고 있는 state
  *
  * 사용 컴포넌트
@@ -263,6 +258,35 @@ let resvInfo = createSlice({
   },
 });
 
+/**
+ * 상세정보에서 저장되는 state
+ * 차량번호, 차종 (차 이름), 총 주행거리
+ *
+ * 사용 컴포넌트 CarDetail
+ */
+let baseInfo = createSlice({
+  name: "baseInfo",
+  initialState: {
+    carNum: "",
+    carName: "",
+    runDistance: "",
+  },
+  reducers: {
+    changeCarNum(state, info) {
+      state.carNum = info.payload;
+      return state;
+    },
+    changeCarName(state, info) {
+      state.carName = info.payload;
+      return state;
+    },
+    changeRunDistance(state, info) {
+      state.runDistance = info.payload;
+      return state;
+    },
+  },
+});
+
 export default configureStore({
   reducer: {
     userInfo: userInfo.reducer,
@@ -275,6 +299,7 @@ export default configureStore({
     driverInfo: driverInfo.reducer,
     resvInfo: resvInfo.reducer,
     userPoint: userPoint.reducer,
+    baseInfo: baseInfo.reducer,
   },
 });
 
@@ -293,3 +318,5 @@ export let {
   changeUsePoint,
 } = resvInfo.actions;
 export let { changeUserPoint } = userPoint.actions;
+export let { changeCarName, changeCarNum, changeRunDistance } =
+  baseInfo.actions;

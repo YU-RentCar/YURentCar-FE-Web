@@ -32,4 +32,15 @@ let getCarInfoList = (payload) => {
   });
 };
 
-export { getStoreList, getCarInfoList };
+/* 차량 상세정보 조회 */
+let getCarDetailInfo = (carNumber) => {
+  return api({
+    url: "/branches/cars/details",
+    method: "get",
+    params: {
+      carNumber: carNumber,
+    },
+  });
+};
+
+export { getStoreList, getCarInfoList, getCarDetailInfo };

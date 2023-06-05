@@ -40,8 +40,6 @@ function HomeSearchPreferOption(props) {
         })
         .then((response) => {
           if (response.status === 200) {
-            console.log(response.data);
-
             /* store로 response를 보낸다. 이 안에서 state를 초기화 하는 방법을 알 수 없어서 이런 방법을 쓴다. */
             dispatch(changeUserPrefer(response.data));
           }
@@ -126,8 +124,6 @@ function HomeSearchPreferOption(props) {
               (async () => {
                 await getCarInfoList(payload)
                   .then((response) => {
-                    console.log("hello?? : " + response.data);
-
                     let recombineCarInfo = [];
 
                     /* 받아온 데이터를 프론트엔드가 사용하는 컴포넌트에 맞추기 위한 재배열 과정 */
@@ -140,8 +136,6 @@ function HomeSearchPreferOption(props) {
                       ];
                       recombineCarInfo.push(temp);
                     });
-
-                    console.log(recombineCarInfo);
 
                     /* 서버에서 가져온 차량 리스트를 변경한다. */
                     props.setCarInfo(recombineCarInfo);
