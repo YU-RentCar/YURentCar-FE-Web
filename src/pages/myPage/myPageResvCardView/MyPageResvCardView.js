@@ -5,7 +5,7 @@ import ExCar from "../../../assets/ExCar.png";
  * 현재 예약 상세 정보 카드뷰
  * @returns
  */
-function MyPageResvCardView() {
+function MyPageResvCardView(props) {
   /* 사용자의 예약 정보 객체 */
   let [resvInfo, setResvInfo] = useState({
     name: "홍길동",
@@ -57,7 +57,7 @@ function MyPageResvCardView() {
           <button
             className="absolute bottom-0 flex items-center justify-center w-full text-xl font-bold border-4 border-blue-300 h-1/4 bg-slate-100 rounded-xl"
             onClick={() => {
-              console.log(resvInfo);
+              props.setShowDetail(true);
             }}
           >
             세부 정보
