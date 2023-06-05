@@ -4,13 +4,19 @@ import ExCar from "../../../../assets/ExCar.png";
 /**
  * 최근 본 차량 상세 정보 카드뷰
  * @param {array} props.carInfo 부모에게서 받아온 사용자가 최근 본 특정 차량의 정보 객체
- * @returns
+ * @param {setter} props.setIsPopUpShow 부모에게서 받아온 팝업이 보이는지 관리하는 state의 setter
  */
 function CarCard(props) {
   return (
     <>
       <div className="flex items-center justify-center w-1/3 rounded-lg h-1/2">
-        <div className="w-[90%] h-[90%] bg-sky-100 rounded-md flex flex-col justify-around items-center">
+        <div
+          className="w-[90%] h-[90%] bg-sky-100 rounded-md flex flex-col justify-around items-center"
+          onClick={(e) => {
+            e.stopPropagation();
+            props.setIsPopUpShow(true);
+          }}
+        >
           {/* 차량의 사진 */}
           <img src={ExCar} alt="ExCar" className="object-contain h-1/2"></img>
 
