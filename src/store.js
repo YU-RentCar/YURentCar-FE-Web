@@ -113,6 +113,156 @@ let selectedStore = createSlice({
   },
 });
 
+/**
+ * 운전자 수
+ *
+ * 사용 컴포넌트
+ * Reservation
+ */
+let driverCount = createSlice({
+  name: "driverCount",
+  initialState: 1,
+  reducers: {
+    increaseCount(state) {
+      state += 1;
+      return state;
+    },
+    decreaseCount(state) {
+      state -= 1;
+      return state;
+    },
+  },
+});
+
+/**
+ * 각 운전자들의 카드 상태
+ *
+ * 사용 컴포넌트
+ * Reservation
+ */
+let showCard = createSlice({
+  name: "showCard",
+  initialState: [true],
+  reducers: {
+    addDriver(state) {
+      state[state.length] = true;
+      return state;
+    },
+    subDriver(state, idx) {
+      console.log(idx);
+      state.splice(idx.payload, 1);
+      return state;
+    },
+    changeState(state, idx) {
+      console.log(state[idx]);
+      state[idx.payload]
+        ? (state[idx.payload] = false)
+        : (state[idx.payload] = true);
+      return state;
+    },
+  },
+});
+
+/**
+ * 각 운전자들 정보
+ *
+ * 사용 컴포넌트
+ * reservation
+ */
+let driverInfo = createSlice({
+  name: "driverInfo",
+  initialState: [
+    {
+      이름: "",
+      생년월일: "",
+      전화번호: "",
+      면허종류: "",
+      면허번호: "",
+      발급일자: "",
+      만료일자: "",
+    },
+  ],
+  reducers: {
+    plusInfo(state) {
+      state.splice(state.length, 0, {
+        이름: "",
+        생년월일: "",
+        전화번호: "",
+        면허종류: "",
+        면허번호: "",
+        발급일자: "",
+        만료일자: "",
+      });
+      return state;
+    },
+    deleteInfo(state, idx) {
+      console.log(idx);
+      state.splice(idx.payload, 1);
+      return state;
+    },
+    changeInfo(state, info) {
+      state[info.payload[1]][info.payload[2]] = info.payload[3];
+      return state;
+    },
+  },
+});
+
+/**
+ * 사용자 보유 포인트
+ *
+ * 사용 컴포넌트
+ * reservation
+ */
+let userPoint = createSlice({
+  name: "userPoint",
+  initialState: 0,
+  reducers: {
+    changeUserPoint(state, afterPoint) {
+      state -= afterPoint.payload;
+      return state;
+    },
+  },
+});
+
+/**
+ * 예약 등록을 위한 정보
+ *
+ * 사용 컴포넌트
+ * reservation
+ */
+let resvInfo = createSlice({
+  name: "resvInfo",
+  initialState: {
+    carNumber: "",
+    startDate: "",
+    endDate: "",
+    totalPrice: 0,
+    usePoint: 0,
+  },
+  reducers: {
+    changeCarNumber(state, info) {
+      state.carNumber = info.payload;
+      return state;
+    },
+    changeStartDate(state, info) {
+      state.startDate = info.payload;
+      return state;
+    },
+    changeEndDate(state, info) {
+      state.endDate = info.payload;
+      return state;
+    },
+    changeTotalPrice(state, info) {
+      state.totalPrice = 200000 + info.payload;
+      return state;
+    },
+    changeUsePoint(state, info) {
+      state.usePoint = info.payload;
+      return state;
+    },
+  },
+});
+
 export default configureStore({
   reducer: {
     userInfo: userInfo.reducer,
@@ -120,6 +270,11 @@ export default configureStore({
     preferInfo: preferInfo.reducer,
     selectedRentalInfo: selectedRentalInfo.reducer,
     selectedStore: selectedStore.reducer,
+    driverCount: driverCount.reducer,
+    showCard: showCard.reducer,
+    driverInfo: driverInfo.reducer,
+    resvInfo: resvInfo.reducer,
+    userPoint: userPoint.reducer,
   },
 });
 
@@ -127,3 +282,14 @@ export let { changeUserInfo, changeNickname } = userInfo.actions;
 export let { changeUserPrefer } = userPrefer.actions;
 export let { changeRentalInfo } = selectedRentalInfo.actions;
 export let { changeProvince, changeStore } = selectedStore.actions;
+export let { increaseCount, decreaseCount } = driverCount.actions;
+export let { changeState, addDriver, subDriver } = showCard.actions;
+export let { plusInfo, deleteInfo, changeInfo } = driverInfo.actions;
+export let {
+  changeCarNumber,
+  changeStartDate,
+  changeEndDate,
+  changeTotalPrice,
+  changeUsePoint,
+} = resvInfo.actions;
+export let { changeUserPoint } = userPoint.actions;
