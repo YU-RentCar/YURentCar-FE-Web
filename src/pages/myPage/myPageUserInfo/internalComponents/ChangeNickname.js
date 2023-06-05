@@ -1,7 +1,7 @@
 import { React, useState } from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { changeNickname } from "../../../../store.js";
+import { checkNickname, changeNick } from "../../../../api/MyPageAxios.js";
 
 /**
  * 닉네임을 변경하는 경우
@@ -85,10 +85,7 @@ function ChangeNickname(props) {
                 } else {
                   /* 중복되었는지 아닌지 확인 필요 */
                   /* 중복 확인 여부에 따른 setDupCheck */
-                  await axios
-                    .get(
-                      `http://localhost:8080/api/v1/users/nicknames/exists?nickname=${tmpNick}`
-                    )
+                  await checkNickname(tmpNick)
                     .then((response) => {
                       if (response.data) {
                         setDupCheck(2);
@@ -99,9 +96,7 @@ function ChangeNickname(props) {
                         getAlert("중복되지 않은 닉네임 입니다.");
                       }
                     })
-                    .catch((error) => {
-                      console.log(error.response);
-                    });
+                    .catch((error) => console.log(error.response));
                 }
               }}
             >
@@ -122,25 +117,11 @@ function ChangeNickname(props) {
                       "마지막 중복 확인과 다른 닉네임이 입력되었습니다."
                     );
                   } else {
-                    await axios
-                      .patch(
-                        `http://localhost:8080/api/v1/users/nicknames`,
-                        {
-                          nickName: newNick,
-                        },
-                        {
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          withCredentials: true,
-                        }
-                      )
+                    await changeNick(newNick)
                       .then((response) => {
-                        if (response.status === 200) {
-                          getAlert("닉네임을 변경했습니다.");
-                          dispatch(changeNickname(newNick));
-                          props.isChange(false);
-                        }
+                        getAlert("닉네임을 변경했습니다.");
+                        dispatch(changeNickname(newNick));
+                        props.isChange(false);
                       })
                       .catch((error) => {
                         console.log(error.response);

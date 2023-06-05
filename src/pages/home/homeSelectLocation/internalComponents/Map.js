@@ -1,6 +1,6 @@
-import { React, useEffect, useState } from "react";
+import { React, useState } from "react";
 import { ReactComponent as MapSVG } from "../../../../assets/Map.svg";
-
+import { getStoreList } from "../../../../api/HomeAxios";
 /**
  * 지도를 출력하고 지도의 상호작용이 설정된 컴포넌트
  * @param {setter} props.setStoreLocList 부모에게 받아온 점포 위치 리스트를 바꾸는 setter
@@ -35,19 +35,21 @@ function Map(props) {
    */
   let callStoreInfo = function (e) {
     /* 지도 밖의 배경에 클릭을 하면 배경의 id 인 layer_1 지역으로 표시되는 것을 막기 위함. */
+    let provinceName = provinceList[Number(e.target.id)];
     if (e.target.id !== "layer_1") {
       props.setLocation(provinceList[Number(e.target.id)]);
+      /* 아래 내용은 서버와의 통신을 구현해둔 내용 */
 
-      /* 아래 내용은 추후 서버와의 통신을 임시로 구현해둔 내용 */
-      alert(e.target.id + " ajax calling");
-      props.setStoreLocList([
-        "울산삼산점",
-        "옥동점",
-        "방어진점",
-        "반구동점",
-        "명촌점",
-        "진장점",
-      ]);
+      (async () => {
+        await getStoreList(provinceName)
+          .then((response) => {
+            console.log(response.data);
+            props.setStoreLocList(response.data);
+          })
+          .catch((error) => {
+            console.log(error.response);
+          });
+      })();
     }
   };
 
@@ -64,20 +66,6 @@ function Map(props) {
       setMapLocation(provinceList[Number(e.target.id)]);
     }
   };
-
-  /* state mapLocation 이 변경되면, 내부 함수가 실행된다.
-    이 내부 코드는 지도 클릭 후에도 푸른색으로 선택 지역을 유지시키기 위한 코드이다.
-  */
-  useEffect(() => {
-    let elms = document.querySelectorAll(".st0");
-    elms.forEach((elm) => {
-      if (elm.id === mapLocation) {
-        elm.classList.add("selected");
-      } else {
-        elm.classList.remove("selected");
-      }
-    });
-  }, [mapLocation]);
 
   return (
     <div

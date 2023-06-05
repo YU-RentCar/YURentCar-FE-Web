@@ -171,11 +171,20 @@ function HomeSelectLocation(props) {
                       ) {
                         setIsFold(true);
                         nav("/home/inquirecar");
+
+                        /* 날짜 정보를 redux store에 저장하기 위한 전처리 과정, YYYY-MM-DD 형식으로 변환한다. */
+                        let changedStartDate = changeDateFormat(startDate);
+                        let changedEndDate = changeDateFormat(endDate);
+
                         let rentalInfoObj = {
-                          startDate: startDate,
-                          endDate: endDate,
-                          startTime: startTime,
-                          endTime: endTime,
+                          startDate: changedStartDate,
+                          endDate: changedEndDate,
+                          startTime:
+                            startTime > 9
+                              ? `${startTime}:00`
+                              : `0${startTime}:00`,
+                          endTime:
+                            endTime > 9 ? `${endTime}:00` : `0${endTime}:00`,
                           province: province,
                           store: selectedStore,
                         };
@@ -196,5 +205,22 @@ function HomeSelectLocation(props) {
     );
   }
 }
+
+/**
+ * 리덕스에 저장되어 있는 날짜 데이터를 YYYY-MM-DD 형식으로 변경하는 함수. 한정된 상황에서만 사용할 수 있으니
+ * @param {store} targetDate 리덕스에 저장되어 있는 날짜 데이터
+ * @returns {string} YYYY-MM-DD 형식의 날짜 데이터
+ */
+let changeDateFormat = function (targetDate) {
+  let tempDate = String(targetDate).split(".");
+  tempDate[1] =
+    Number(tempDate[1]) < 10 ? " 0" + tempDate[1].trim() : tempDate[1];
+  tempDate[2] =
+    Number(tempDate[2]) < 10 ? " 0" + tempDate[2].trim() : tempDate[2];
+
+  tempDate = tempDate.join(".");
+
+  return tempDate;
+};
 
 export { HomeSelectLocation };

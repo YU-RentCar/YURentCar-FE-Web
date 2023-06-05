@@ -15,7 +15,7 @@ function Point() {
   useEffect(() => {
     (async () => {
       axios
-        .get("http://localhost:8080/api/v1/users/point", {
+        .get("http://localhost:8080/api/v1/users/points", {
           headers: {
             "Content-Type": "application/json",
           },
