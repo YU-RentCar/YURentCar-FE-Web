@@ -3,11 +3,13 @@ import { CheckboxForm } from "./internalComponents/CheckboxForm";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { changeUserPrefer } from "../../../../store";
+import { getCarInfoList } from "../../../../api/HomeAxios";
 
 /**
  * 차량의 옵션을 선택하는 컴포넌트.
  * @param {string} props.width 부모에게서 받아온 넓이. (tailwind 속성)
  * @param {string} props.height 부모에게서 받아온 높이. (tailwind 속성)
+ * @param {object} props.setCarInfo 부모에게서 받아온 차량목록을 변경하는 setter
  */
 function HomeSearchPreferOption(props) {
   const initSetting = props.width + " " + props.height;
@@ -20,6 +22,7 @@ function HomeSearchPreferOption(props) {
   const preferTitle = useSelector((state) => {
     return state.preferInfo;
   });
+
   const userPrefer = useSelector((state) => {
     return state.userPrefer;
   });
@@ -104,14 +107,49 @@ function HomeSearchPreferOption(props) {
           <button
             className="w-4/5 px-6 py-2 text-white rounded-md bg-rose-500"
             onClick={() => {
-              const temp = {
-                size: sizeCheckedList,
-                oil: oilCheckedList,
-                trans: transCheckedList,
-                min: document.querySelector("#countPeople").value,
+              /* 차량 리스트를 서버에 요청하기 위한 전처리 과정 */
+              const payload = {
+                startDate:
+                  selectedRentalInfo.startDate +
+                  " " +
+                  selectedRentalInfo.startTime,
+                endDate:
+                  selectedRentalInfo.endDate + " " + selectedRentalInfo.endTime,
+                carSizes: sizeCheckedList,
+                minCount: document.querySelector("#countPeople").value,
+                oilTypes: oilCheckedList,
+                transmissions: transCheckedList,
+                branchName: selectedRentalInfo.store,
+                siDo: selectedRentalInfo.province,
               };
-              console.log(temp);
-              console.log(selectedRentalInfo);
+
+              (async () => {
+                await getCarInfoList(payload)
+                  .then((response) => {
+                    console.log("hello?? : " + response.data);
+
+                    let recombineCarInfo = [];
+
+                    /* 받아온 데이터를 프론트엔드가 사용하는 컴포넌트에 맞추기 위한 재배열 과정 */
+                    response.data.map((elm) => {
+                      let temp = [
+                        elm.carName,
+                        elm.carNumber,
+                        String(elm.totalDistance),
+                        "300000",
+                      ];
+                      recombineCarInfo.push(temp);
+                    });
+
+                    console.log(recombineCarInfo);
+
+                    /* 서버에서 가져온 차량 리스트를 변경한다. */
+                    props.setCarInfo(recombineCarInfo);
+                  })
+                  .catch((error) => {
+                    console.log(error.response);
+                  });
+              })();
             }}
           >
             선택 옵션 차량 검색

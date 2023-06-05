@@ -12,4 +12,24 @@ let getStoreList = (province) => {
   });
 };
 
-export { getStoreList };
+/* 차량 리스트 */
+let getCarInfoList = (payload) => {
+  /* 차량 리스트를 서버에 요청하기 위해 필요한 처리 */
+  let par = new URLSearchParams();
+  par.append("startDate", payload.startDate);
+  par.append("endDate", payload.endDate);
+  par.append("carSizes", payload.carSizes);
+  par.append("minCount", payload.minCount);
+  par.append("oilTypes", payload.oilTypes);
+  par.append("transmissions", payload.transmissions);
+  par.append("branchName", payload.branchName);
+  par.append("siDo", payload.siDo);
+
+  return api({
+    url: "/branches/cars",
+    method: "get",
+    params: par,
+  });
+};
+
+export { getStoreList, getCarInfoList };
