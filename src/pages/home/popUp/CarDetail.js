@@ -1,11 +1,27 @@
 import ExCar from "../../../assets/ExCar.png";
 import Close from "../../../assets/Close.png";
-
+import { useDispatch, useSelector } from "react-redux";
+import { changeCarName, changeCarNum, changeRunDistance } from "../../../store";
+import { useNavigate } from "react-router-dom";
 /**
  * 차량 상세 정보를 보여주는 팝업
- * @param {setter} props.setIsPopUpShow
+ * @param {setter} props.setIsPopUpShow 부모에게 받아온 팝업 여부를 정해주는 setter
+ * @param {state} props.carDetailInfoObj 부모에게 받아온 차량 정보
+ * @param {state} props.carInfo 부모에게 받아온 카드뷰 정보
  */
 function CarDetail(props) {
+  let rentalInfo = useSelector((state) => {
+    return state.selectedRentalInfo;
+  });
+
+  let baseInfo = useSelector((state) => {
+    return state.baseInfo;
+  });
+
+  let dispatch = useDispatch();
+
+  let nav = useNavigate();
+
   return (
     <div className="fixed top-0 left-0 right-0 flex items-center justify-center w-full h-full">
       <div
@@ -34,11 +50,22 @@ function CarDetail(props) {
               </div>
               <div className="w-[90%] h-[80px] bg-blue-300 mb-5 text-3xl text-white font font-extrabold rounded-3xl">
                 <div className="flex items-center justify-center w-full h-full rounded-3xl">
-                  <del>300000원</del> &nbsp; &nbsp; 200000원
+                  <del>{props.carDetailInfoObj.price * 1.3}원</del> &nbsp;
+                  &nbsp; {props.carDetailInfoObj.price}원
                 </div>
               </div>
               <div className=" w-[90%] h-[80px] bg-rose-500 text-4xl text-white font font-extrabold rounded-3xl">
-                <button className="flex items-center justify-center w-full h-full rounded-3xl">
+                <button
+                  className="flex items-center justify-center w-full h-full rounded-3xl"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(changeCarNum(props.carInfo[1]));
+                    dispatch(changeCarName(props.carInfo[0]));
+                    dispatch(changeRunDistance(props.carInfo[2]));
+
+                    nav("/home/reservation");
+                  }}
+                >
                   예약하기
                 </button>
               </div>
@@ -50,7 +77,8 @@ function CarDetail(props) {
                 예약 기간
               </div>
               <div className="border-[3px] rounded-2xl px-7 py-2 border-blue-500 font-bold">
-                2023-05-08 / 08:00 ~ 2023-05-10 / 22:00
+                {rentalInfo.startDate} / {rentalInfo.startTime} ~{" "}
+                {rentalInfo.endDate} / {rentalInfo.endTime}
               </div>
             </div>
             <div className="flex flex-col bg-white w-[96%] h-2/6">
@@ -69,7 +97,7 @@ function CarDetail(props) {
                       차종
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      그랜저 HG
+                      {props.carInfo[0]}
                     </div>
                   </div>
                   <div className="flex flex-col w-1/4  h-3/4 border-[3px] rounded-2xl border-blue-500">
@@ -77,7 +105,7 @@ function CarDetail(props) {
                       차 번호
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      222-2222
+                      {props.carInfo[1]}
                     </div>
                   </div>
                   <div className="flex flex-col w-1/4 h-3/4 border-[3px] rounded-2xl border-blue-500">
@@ -85,7 +113,7 @@ function CarDetail(props) {
                       총 주행거리
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      2000km
+                      {props.carInfo[2]}
                     </div>
                   </div>
                 </div>
@@ -106,7 +134,7 @@ function CarDetail(props) {
                       차량크기
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      중형
+                      {props.carDetailInfoObj.carSize}
                     </div>
                   </div>
                   <div className="flex flex-col w-1/5 h-3/4 border-[3px] rounded-2xl border-blue-500">
@@ -114,7 +142,7 @@ function CarDetail(props) {
                       유종
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      전기
+                      {props.carDetailInfoObj.oilType}
                     </div>
                   </div>
                   <div className="flex flex-col w-1/5 h-3/4 border-[3px] rounded-2xl border-blue-500">
@@ -122,7 +150,7 @@ function CarDetail(props) {
                       트랜스미션
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      자동
+                      {props.carDetailInfoObj.transmission}
                     </div>
                   </div>
                   <div className="flex flex-col w-1/5 h-3/4 border-[3px] rounded-2xl border-blue-500">
@@ -130,7 +158,7 @@ function CarDetail(props) {
                       최소인원
                     </div>
                     <div className="flex items-center justify-center w-full font-bold h-1/2">
-                      5인승
+                      {props.carDetailInfoObj.maxPassenger}인승
                     </div>
                   </div>
                 </div>

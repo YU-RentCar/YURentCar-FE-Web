@@ -1,5 +1,6 @@
 import { React } from "react";
 import ExCar from "../../../assets/ExCar.png";
+import { getCarDetailInfo } from "../../../api/HomeAxios";
 
 /**
  * 최근 본 차량 상세 정보 카드뷰
@@ -7,6 +8,7 @@ import ExCar from "../../../assets/ExCar.png";
  * @param {setter} props.setIsPopUpShow 부모에게서 받아온 팝업이 보이는지 관리하는 state의 setter
  * @param {number} props.idx 부모에게서 받아온 현재 리스트의 번호
  * @param {setter} props.setSeletedIdx 부모에게서 받아온 선택된 리스트의 정보를 상위 컴포넌트에 전달하는 setter
+ * @param {setter} props.setCarDetailInfoObj 부모에게서 받아온 팝업 내용을 업데이트하는 setter
  */
 function CarCard(props) {
   return (
@@ -19,6 +21,16 @@ function CarCard(props) {
             props.setIsPopUpShow(true);
 
             props.setSeletedIdx(props.idx);
+
+            (async () => {
+              await getCarDetailInfo(props.carInfo[1])
+                .then((response) => {
+                  props.setCarDetailInfoObj(response.data);
+                })
+                .catch((error) => {
+                  console.log(error.response);
+                });
+            })();
 
             // 로컬스토리지에 없으면 null, 빈 배열로 초기화
             if (window.localStorage.getItem("carNum") === null) {

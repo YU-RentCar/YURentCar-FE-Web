@@ -1,6 +1,6 @@
 import { HomeSearchPreferOption } from "./homeSearchPreferOption/HomeSearchPreferOption";
-import { useState } from "react";
-import { CarCard } from "../../myPage/myPageRecord/internalComponents/CarCard";
+import { useEffect, useState } from "react";
+import { CarCard } from "../popUp/CarCard";
 import { useOutletContext } from "react-router-dom";
 import { CarDetail } from "../popUp/CarDetail";
 
@@ -19,6 +19,12 @@ function HomeInquireCar(props) {
 
   let [isPopUpShow, setIsPopUpShow] = useState(false);
 
+  /* 무슨 리스트가 선택되었는지 확인하기 위한 state */
+  let [selectedIdx, setSeletedIdx] = useState();
+
+  /* 팝업에서 사용할 정보 */
+  let [carDetailInfoObj, setCarDetailInfoObj] = useState({});
+
   return (
     <>
       <div className={initSetting}>
@@ -29,6 +35,9 @@ function HomeInquireCar(props) {
                 <CarCard
                   carInfo={val}
                   setIsPopUpShow={setIsPopUpShow}
+                  idx={idx}
+                  setSeletedIdx={setSeletedIdx}
+                  setCarDetailInfoObj={setCarDetailInfoObj}
                 ></CarCard>
               );
             })}
@@ -44,7 +53,13 @@ function HomeInquireCar(props) {
             </div>
           </div>
         </div>
-        {isPopUpShow ? <CarDetail setIsPopUpShow={setIsPopUpShow} /> : null}
+        {isPopUpShow ? (
+          <CarDetail
+            setIsPopUpShow={setIsPopUpShow}
+            carDetailInfoObj={carDetailInfoObj}
+            carInfo={carInfo[selectedIdx]}
+          />
+        ) : null}
       </div>
     </>
   );
