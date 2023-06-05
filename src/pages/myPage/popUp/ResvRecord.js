@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResvCard } from "./ResvCard";
 import { Review } from "./Review";
 import Close from "../../../assets/Close.png";
 import ExCar from "../../../assets/ExCar.png";
+import { getResvRecord } from "../../../api/MyPageAxios";
 
 /**
  * 상세 내역 조회
@@ -13,38 +14,37 @@ import ExCar from "../../../assets/ExCar.png";
  */
 function ResvRecord(props) {
   /* 예약 내역 상세 정보 */
-  let [resvList, setResvList] = useState([
-    {
-      사진: ExCar,
-      지점: "달서구지점",
-      시작: "2023-05-01 / 08:00",
-      종료: "2023-05-31 / 22:00",
-    },
-    {
-      사진: ExCar,
-      지점: "수성구지점",
-      시작: "2023-05-01 / 08:00",
-      종료: "2023-05-31 / 22:00",
-    },
-    {
-      사진: ExCar,
-      지점: "북구지점",
-      시작: "2023-05-01 / 08:00",
-      종료: "2023-05-31 / 22:00",
-    },
-    {
-      사진: ExCar,
-      지점: "서대구지점",
-      시작: "2023-05-01 / 08:00",
-      종료: "2023-05-31 / 22:00",
-    },
-  ]);
+  let [resvList, setResvList] = useState([]);
+  let [reviewType, setReviewType] = useState({
+    POSSIBLE_POINT: 1,
+    POSSIBLE_NO_POINT: 2,
+    IMPOSSIBLE: 3,
+    ALREADY: 4,
+  });
+
+  useEffect(() => {
+    (async () => {
+      await getResvRecord()
+        .then((response) => {
+          if (response.data.length === 0) {
+            console.log("shit");
+            props.showPopUp(false);
+          } else {
+            console.log(response.data);
+            setResvList(response.data);
+          }
+        })
+        .catch((error) => console.log(error.response));
+    })();
+  });
 
   /* 후기 작성 팝업 제어 state */
   let [review, setReview] = useState(false);
 
   /* 후기 작성의 대상이 될 아이템 state */
   let [reviewItem, setReviewItem] = useState({});
+
+  let [canGetPoint, setCanGetPoint] = useState(0);
 
   return (
     <>
@@ -59,6 +59,13 @@ function ResvRecord(props) {
           {/* 상세 내역들 */}
           <div className="w-[90%] h-[90%] flex items-center flex-wrap overflow-y-scroll rounded-lg border-blue-300 border-2">
             {resvList.map((item, index) => {
+              if (item.reiewType === "ALREADY") {
+                document.getElementById("record" + index).textContent =
+                  "작성 완료";
+                document.getElementById("record" + index).disabled = true;
+              } else if (item.reviewType === "IMPOSSIBLE") {
+                document.getElementById("record" + index).disabled = true;
+              }
               return (
                 <div
                   className="flex flex-col items-center justify-between w-1/3 h-[60%]"
@@ -69,10 +76,12 @@ function ResvRecord(props) {
 
                   {/* 해당 카드뷰에 대한 후기 작성 버튼 */}
                   <button
+                    id={"record" + index}
                     className="w-1/3 h-[10%] flex justify-center items-center bg-rose-500 rounded-lg text-white font-bold"
                     onClick={() => {
                       setReviewItem(item);
                       setReview(true);
+                      setCanGetPoint(reviewType[item.reviewType] - 1);
                     }}
                   >
                     후기 작성
@@ -101,6 +110,7 @@ function ResvRecord(props) {
           item={reviewItem}
           alertMsg={props.alertMsg}
           showAlert={props.showAlert}
+          canGetPoint={canGetPoint}
         />
       )}
     </>

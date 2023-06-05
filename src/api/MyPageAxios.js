@@ -43,10 +43,58 @@ let changeUserPref = (tmpPrefer) => {
   });
 };
 
+/* 사용자 포인트 내역 */
+let getPointRecord = () => {
+  return api({
+    url: "/points",
+    method: "get",
+  });
+};
+
+/* 사용자 예약 내역 */
+let getResvRecord = () => {
+  return api({
+    url: "/users/reservations",
+    method: "get",
+  });
+};
+
+/* 최근 본 차량 조회 */
+let getRecentRecord = () => {
+  let params = new URLSearchParams();
+  params.append("carNumbers", ["11가1111", "12삼4567"]);
+  return api({
+    url: "/branches/cars/views",
+    method: "get",
+    params: params,
+  });
+};
+
+/* 로그아웃 */
+let logout = () => {
+  return api({
+    url: "/logout",
+    method: "post",
+  });
+};
+
+/* 예약 간단 정보 */
+let getBaseInfo = () => {
+  return api({
+    url: "/users/reservations/details",
+    method: "get",
+  });
+};
+
 export {
   getUserInfo,
   checkNickname,
   changeNick,
   getUserPrefer,
   changeUserPref,
+  getPointRecord,
+  getResvRecord,
+  getRecentRecord,
+  logout,
+  getBaseInfo,
 };

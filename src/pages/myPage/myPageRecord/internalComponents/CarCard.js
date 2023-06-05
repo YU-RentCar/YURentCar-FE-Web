@@ -17,20 +17,20 @@ function CarCard(props) {
           {/* 차종, 차량 번호*/}
           <div className="w-[80%] h-[10%] flex justify-around">
             <div className="flex items-center justify-center h-full font-bold bg-blue-300 rounded-md w-fit min-w-[30%] text-sm">
-              {props.carInfo[0]}
+              {props.carInfo["carName"]}
             </div>
             <div className="flex items-center justify-center h-full font-bold bg-blue-300 rounded-md w-fit min-w-[50%] text-sm">
-              {props.carInfo[1]}
+              {props.carInfo["carNumber"]}
             </div>
           </div>
 
           {/* 총 주행 거리, 1일 렌트 비용 */}
           <div className="w-[80%] h-[10%] flex justify-around">
             <div className="h-full bg-blue-300 rounded-md w-fit min-w-[50%] flex justify-center items-center font-bold text-sm">
-              총 {props.carInfo[2]}km
+              총 {props.carInfo["totalDistance"]}km
             </div>
             <div className="h-full bg-amber-500 rounded-md min-w-[40%] w-fit flex justify-center items-center font-bold text-sm">
-              {props.carInfo[3]}원
+              100000원
             </div>
           </div>
         </div>

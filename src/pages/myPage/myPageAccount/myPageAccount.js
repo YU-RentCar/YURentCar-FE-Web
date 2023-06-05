@@ -1,10 +1,12 @@
 import { React } from "react";
-
+import { logout } from "../../../api/MyPageAxios";
+import { useNavigate } from "react-router-dom";
 /**
  * 사용자 계정 관리
  * @returns
  */
 function MyPageAccount() {
+  let nav = useNavigate();
   return (
     <>
       <div className="w-full mt-20 h-[350px]">
@@ -38,7 +40,19 @@ function MyPageAccount() {
                 로그아웃
               </div>
               {/* 로그아웃 버튼 */}
-              <button className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500">
+              <button
+                className="w-[15%] flex justify-center items-center text-xl font-bold border-blue-300 border-4 rounded-md bg-slate-100 text-rose-500"
+                onClick={() => {
+                  (async () => {
+                    await logout()
+                      .then((response) => {
+                        console.log(response.data);
+                        nav("/auth");
+                      })
+                      .catch((error) => console.log(error.response));
+                  })();
+                }}
+              >
                 로그아웃
               </button>
             </div>
