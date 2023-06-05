@@ -1,10 +1,10 @@
 import { React, useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { useDispatch } from "react-redux";
 import { DefaultItem } from "./internalComponents/DefaultItem";
 import { ChangeNickname } from "./internalComponents/ChangeNickname";
 import { Alert } from "../popUp/Alert";
 import { changeUserInfo } from "../../../store.js";
+import { getUserInfo } from "../../../api/MyPageAxios";
 
 /**
  * 사용자의 기본 정보
@@ -25,19 +25,11 @@ function MyPageUserInfo() {
   /* 서버로부터 사용자 정보 전달 받음 */
   useEffect(() => {
     (async () => {
-      await axios
-        .get(`http://localhost:8080/api/v1/users/profiles`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
+      await getUserInfo()
+        .then((response) => {
+          dispatch(changeUserInfo(response.data));
         })
-        .then(function (response) {
-          if (response.status === 200) {
-            dispatch(changeUserInfo(response.data));
-          }
-        })
-        .catch(function (error) {
+        .catch((error) => {
           console.log(error.response);
         });
     })();

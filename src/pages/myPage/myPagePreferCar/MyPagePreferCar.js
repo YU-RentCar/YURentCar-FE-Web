@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from "react";
-import { Alert } from "../popUp/Alert";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import { Alert } from "../popUp/Alert";
 import { changeUserPrefer } from "../../../store.js";
+import { getUserPrefer, changeUserPref } from "../../../api/MyPageAxios";
 
 function MyPagePreferCar() {
   let userPrefer = useSelector((state) => state.userPrefer);
@@ -31,18 +31,9 @@ function MyPagePreferCar() {
 
   useEffect(() => {
     (async () => {
-      await axios
-        .get("http://localhost:8080/api/v1/users/prefer-filter", {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        })
+      await getUserPrefer()
         .then((response) => {
-          if (response.status === 200) {
-            console.log(response.data);
-            dispatch(changeUserPrefer(response.data));
-          }
+          dispatch(changeUserPrefer(response.data));
         })
         .catch((error) => {
           console.log(error.response);
@@ -139,28 +130,10 @@ function MyPagePreferCar() {
               }
               tmpPrefer["minCount"] = document.getElementById("minCount").value;
               console.log(tmpPrefer);
-              await axios
-                .patch(
-                  "http://localhost:8080/api/v1/users/prefer-filter",
-                  {
-                    carSizes: tmpPrefer.carSizes,
-                    minCount: tmpPrefer.minCount,
-                    oilTypes: tmpPrefer.oilTypes,
-                    transmissions: tmpPrefer.transmissions,
-                  },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    withCredentials: true,
-                  }
-                )
+              await changeUserPref(tmpPrefer)
                 .then((response) => {
-                  if (response.status === 200) {
-                    /* alert 2초 동안 호출 */
-                    dispatch(changeUserPrefer(tmpPrefer));
-                    getAlert("정보가 변경되었습니다.");
-                  }
+                  dispatch(changeUserPrefer(tmpPrefer));
+                  getAlert("정보가 변경되었습니다.");
                 })
                 .catch((error) => {
                   console.log(error.response);
