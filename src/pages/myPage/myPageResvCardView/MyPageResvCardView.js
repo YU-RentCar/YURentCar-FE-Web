@@ -1,5 +1,6 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import ExCar from "../../../assets/ExCar.png";
+import { getBaseInfo } from "../../../api/MyPageAxios";
 
 /**
  * 현재 예약 상세 정보 카드뷰
@@ -8,16 +9,24 @@ import ExCar from "../../../assets/ExCar.png";
 function MyPageResvCardView(props) {
   /* 사용자의 예약 정보 객체 */
   let [resvInfo, setResvInfo] = useState({
-    name: "홍길동",
-    period: "2023-05-01 / 08:00 ~ 2023-05-31 / 22:00",
-    location: "수성구지점",
-    car: "그랜저 HG",
-    number: "58부 7792",
-    drivers: ["홍", "길", "동"],
+    startDate: "tmp",
+    endDate: "tmp",
   });
 
+  useEffect(() => {
+    (async () => {
+      await getBaseInfo()
+        .then((response) => {
+          setResvInfo(response.data);
+          console.log(typeof response.data.startDate);
+          console.log();
+        })
+        .catch((error) => console.log(error.response));
+    })();
+  }, []);
+
   /* 예약 정보에 포함된 운전자들을 보여주게됨 */
-  let driverList = resvInfo["drivers"].map((driver, index) => (
+  let driverList = ["홍", "길", "동"].map((driver, index) => (
     <span key={index}>
       제 {index + 1}운전자 : {driver} &nbsp;
     </span>
@@ -27,8 +36,8 @@ function MyPageResvCardView(props) {
     <div className="w-full px-10 py-12 bg-white border-2 h-fit border-rose-500 rounded-3xl">
       {/* 예약 정보 멘트 */}
       <div className="text-4xl font-extrabold">
-        <span className="text-amber-700">{resvInfo["name"]}</span> 님이 예약하신
-        차량이 준비 중이에요
+        <span className="text-amber-700">최요하</span> 님이 예약하신 차량이 준비
+        중이에요
       </div>
 
       {/* 예약 세부 정보들 */}
@@ -42,12 +51,15 @@ function MyPageResvCardView(props) {
 
         {/* 예약 정보 */}
         <div className="w-[50%] text-xl font-bold leading-relaxed flex flex-col justify-center">
-          예약 기간 : {resvInfo["period"]}
+          예약 기간 :
+          {resvInfo["startDate"].substring(0, 10) +
+            " ~ " +
+            resvInfo["endDate"].substring(0, 10)}
           <br />
-          예약 지점 : {resvInfo["location"]}
+          예약 지점 : {resvInfo["branchName"]}
           <br />
-          차량 : {resvInfo["car"]}
-          <br />차 번호 : {resvInfo["number"]}
+          차량 : {resvInfo["carName"]}
+          <br />차 번호 : {resvInfo["carNumber"]}
           <br />
           <div className="flex items-center">{driverList}</div>
         </div>

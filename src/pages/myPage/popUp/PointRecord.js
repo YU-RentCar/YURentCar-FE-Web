@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Close from "../../../assets/Close.png";
+import { getPointRecord } from "../../../api/MyPageAxios";
 
 /**
  * 포인트 사용/적립 내역 상세 조회
@@ -7,37 +8,37 @@ import Close from "../../../assets/Close.png";
  * @returns
  */
 function PointRecord(props) {
-  /* 사용/적립 내역 */
-  let [pointList, setPointList] = useState([
-    {
-      사유: "후기 작성",
-      타입: "+",
-      액수: "500",
-      "적립 일시": "2023-05-01",
-    },
-    {
-      사유: "연체 반납",
-      타입: "-",
-      액수: "500",
-      "적립 일시": "2023-05-31",
-    },
-  ]);
+  let [pointRecords, setPointRecords] = useState([{}]);
+
+  useEffect(() => {
+    (async () => {
+      await getPointRecord()
+        .then((response) => {
+          if (response.data.length === 0) {
+            console.log("shit");
+            props.showPopUp(false);
+          } else console.log(response.data);
+        })
+        .catch((error) => console.log(error.response));
+    })();
+  });
 
   /* 사용이냐 적립이냐에 따른 표현 방식 제어 */
   let getMent = (item, index) => {
     let color = "";
     /* 적립(+) = blue, 사용(-) = amber */
-    item["타입"] === "+"
-      ? (color = "text-blue-500")
-      : (color = "text-amber-500");
+    item["price"] > 0 ? (color = "text-blue-500") : (color = "text-amber-500");
     return (
       <div
         className="w-[90%] h-[10%] mt-5 bg-slate-100 border-slate-400 border-2 rounded-lg flex justify-center items-center font-bold"
         key={index}
       >
-        {item["적립 일시"]} &nbsp;
-        {item["사유"]} &nbsp;
-        <span className={color}>{item["타입"] + item["액수"]}</span>
+        {item["createdTime"]} &nbsp;
+        {item["reason"]} &nbsp;
+        <span className={color}>
+          {item["price"] > 0 ? "+" : "-"}
+          {item["price"] + "원"}
+        </span>
       </div>
     );
   };
@@ -57,7 +58,7 @@ function PointRecord(props) {
             포인트 사용/적립 내역
           </div>
           <div className="flex flex-col items-center w-full overflow-y-scroll border-2 border-blue-500 rounded-lg h-[90%]">
-            {pointList.map((item, index) => {
+            {pointRecords.map((item, index) => {
               return getMent(item, index);
             })}
           </div>

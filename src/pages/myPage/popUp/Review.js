@@ -9,6 +9,9 @@ import { ResvCard } from "./ResvCard";
  * @returns
  */
 function Review(props) {
+  if (props.canGetPoint === 0) {
+    document.getElementById("reviewBtn").textContent = "작성 완료";
+  }
   return (
     <div className="fixed top-0 left-0 right-0 flex items-center justify-center w-full h-full">
       <div className="fixed w-full h-full opacity-25 bg-slate-600"></div>
@@ -19,6 +22,7 @@ function Review(props) {
 
           {/* 작성 완료 버튼 */}
           <button
+            id="reviewBtn"
             className="w-full font-bold text-white rounded-lg h-[10%] bg-rose-500 mt-5"
             onClick={() => {
               /* alert 2초 동안 호출 */

@@ -30,7 +30,7 @@ function CarSpec() {
             "승차 인원": response.data.maxPassenger,
             구동기: response.data.transmission,
             브랜드: response.data.carBrand,
-            "국산/외제": response.data.isKorean ? "국산" : "외제",
+            "국산/외제": response.data.isKorean,
           };
           setCarSpec(newSpec);
         })
