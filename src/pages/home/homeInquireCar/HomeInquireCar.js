@@ -14,22 +14,8 @@ function HomeInquireCar(props) {
 
   let initSetting = width;
 
-  let [carInfo, setCarInfo] = useState([
-    ["차1", "11일 1111", "11111", "11111"],
-    ["차2", "22이 2222", "22222", "22222"],
-    ["차3", "33삼 3333", "33333", "33333"],
-    ["차5", "55오 5555", "55555", "55555"],
-    ["차5", "55오 5555", "55555", "55555"],
-    ["차5", "55오 5555", "55555", "55555"],
-    ["차5", "55오 5555", "55555", "55555"],
-  ]);
-
-  const titleArray = [
-    "글1",
-    "좀 긴 글 글글그ㅡ르르그ㅡ르ㅡㅡ그르ㅡ글",
-    "글 3",
-    "글 4",
-  ];
+  /* 차량 리스트 state */
+  let [carInfo, setCarInfo] = useState([]);
 
   return (
     <>
@@ -45,6 +31,8 @@ function HomeInquireCar(props) {
               <HomeSearchPreferOption
                 width="w-full"
                 height="h-full"
+                /* 차량 리스트를 변경하는 setter */
+                setCarInfo={setCarInfo}
               ></HomeSearchPreferOption>
             </div>
           </div>
